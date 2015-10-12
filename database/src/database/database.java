@@ -27,6 +27,7 @@ public class database {
 	public String search(String query)
 	{
 		String[] firstWord = query.split(" ");
+		
 		//multi word query
 		if(firstWord.length > 1)
 		{

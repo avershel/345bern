@@ -6,8 +6,9 @@ public class paragraphObject {
 	public String author;
 	public String paragraph;
 	
-	public paragraphObject(String paragraph1, String title1, String author1)
+	public paragraphObject(String paragraph1, String title1, String author1, int ord)
 	{
+		ordinal = ord;
 		paragraph = paragraph1;
 		title = title1;
 		author = author1;

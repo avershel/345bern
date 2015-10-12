@@ -29,7 +29,7 @@ public class textObject {
 		String lines[] = str.split("\\r?\\n");
 		for(int i = 0; i < lines.length; i++)
 		{
-			new paragraphObject(lines[i], title, author);
+			new paragraphObject(lines[i], title, author, i);
 		}		
 	}
 	
