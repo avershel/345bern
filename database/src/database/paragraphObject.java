@@ -1,4 +1,4 @@
-package database;
+package gutenSearch;
 
 public class paragraphObject {
 	public String title;
@@ -12,6 +12,7 @@ public class paragraphObject {
 		paragraph = paragraph1;
 		title = title1;
 		author = author1;
+		//eliminate symbols, split by " "
 		String[] words = paragraph.replaceAll("[^a-zA-Z ]", "").toLowerCase().split("\\s+");
 		for(String s: words)
 		{
@@ -24,14 +25,17 @@ public class paragraphObject {
 	public void addToBucket(String key)
 	{
 		bucket value = database.buckets.get(key);
+		//if the bucket exists
 		if (value != null) {
 		    value.addParObject(this);
 		    database.buckets.put(key, value);
-
+			
 		} else {
-			bucket buck = new bucket(key);
-		    buck.addParObject(this);
-		    database.buckets.put(key, buck);
+
+				bucket buck = new bucket(key);
+			    buck.addParObject(this);
+			    database.buckets.put(key, buck);	
+			
 		}
 	}
 	
@@ -47,7 +51,10 @@ public class paragraphObject {
 	
 	public String toString()
 	{
-		return paragraph;
+		String str = String.format("Title: %s\tAuthor: %s\t Ordinal: %d\n", title, author, ordinal);
+		str += paragraph + "\n";
+		return str;
 	}
 }
+
 
