@@ -28,6 +28,11 @@ public class bucket implements Iterable<paragraphObject>{
 		}
 		return str;
 	}
+	
+	public int length()
+	{
+		return parList.size();
+	}
 
 	@Override
 	public Iterator<paragraphObject> iterator() {
