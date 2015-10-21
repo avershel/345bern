@@ -1,11 +1,13 @@
-package database;
+package gutenSearch;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 public class bucket implements Iterable<paragraphObject>{
 	public String key;
-	public ArrayList<paragraphObject> parList = new ArrayList<paragraphObject>();
+	public Set<paragraphObject> parList = new HashSet<paragraphObject>();
 	
 	public bucket(String bucketKey)
 	{
@@ -22,9 +24,8 @@ public class bucket implements Iterable<paragraphObject>{
 		String str = "";
 		for(paragraphObject po : parList)
 		{
-			str += po;
+			str += po.toString();
 		}
-		
 		return str;
 	}
 
