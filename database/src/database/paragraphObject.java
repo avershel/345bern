@@ -16,7 +16,6 @@ public class paragraphObject {
 		String[] words = paragraph.replaceAll("[^a-zA-Z ]", "").toLowerCase().split("\\s+");
 		for(String s: words)
 		{
-
 			addToBucket(s);
 			
 		}
@@ -49,6 +48,26 @@ public class paragraphObject {
 		title = titleName;
 	}
 	
+	public String getTitle()
+	{
+		return title;
+	}
+	
+	public String getAuthor()
+	{
+		return author;
+	}
+	
+	public int getOrdinal()
+	{
+		return ordinal;
+	}
+	
+	public String getPar()
+	{
+		return paragraph;
+	}
+	
 	public String toString()
 	{
 		String str = String.format("Title: %s\tAuthor: %s\t Ordinal: %d\n", title, author, ordinal);
@@ -56,5 +75,3 @@ public class paragraphObject {
 		return str;
 	}
 }
-
-
