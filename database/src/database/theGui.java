@@ -13,6 +13,9 @@ public class theGUI implements ActionListener {
    private JFrame userFrame;
    private JFrame displayFrame;
    
+   
+   database db = new database();
+   
    //File Chooser
    JFileChooser jfc;
    Container contentPane;
@@ -176,11 +179,12 @@ public class theGUI implements ActionListener {
 	   JPanel searchInputPanel = new JPanel(new FlowLayout());
 	   JLabel searchLabel = new JLabel("Enter Search Terms");
 	   JPanel searchPanel = new JPanel(new BorderLayout());
-	   final database db = new database();
+//	   final database db = new database(); 
 	   
 	   
 	   final JTextField searchText = new JTextField(25);
-	   final JTextArea resultText = new JTextArea(40, 40);
+	   final JTextArea resultText = new JTextArea();
+	   resultText.setLineWrap(true);
 	   resultText.setEditable(false);
 	   
 	   
@@ -191,15 +195,13 @@ public class theGUI implements ActionListener {
 	   
 	   
 	   JPanel resultLabelPanel = new JPanel(new FlowLayout());
-	   JPanel resultOutputPanel = new JPanel(new FlowLayout());
 	   JLabel resultLabel = new JLabel("Results");
 	   JPanel resultPanel = new JPanel(new BorderLayout());
 	   JScrollPane scrollPane = new JScrollPane(resultText);
 	   
 	   resultLabelPanel.add(resultLabel);
-	   resultOutputPanel.add(scrollPane);
 	   resultPanel.add(resultLabelPanel, BorderLayout.NORTH);
-	   resultPanel.add(resultOutputPanel, BorderLayout.CENTER);
+	   resultPanel.add(scrollPane, BorderLayout.CENTER);
 	   
 	   searchText.addActionListener(new ActionListener(){
 		   public void actionPerformed(ActionEvent e){
@@ -219,15 +221,9 @@ public class theGUI implements ActionListener {
 	   
 	   JPanel info = new JPanel(new FlowLayout());
 	   
-	   JLabel triviaLabel = new JLabel("The search looked through the following number of paragraphs: ");
-	   
-	   
-	   JPanel trivia = new JPanel(new BorderLayout());
-	   trivia.add(triviaLabel, BorderLayout.EAST);
-	   
-	   
-	   info.add(trivia);
-	   
+	   JLabel triviaLabel = new JLabel("Number of sources parsed: " + db.pomap.size());   
+	   	   
+	   info.add(triviaLabel);
 	   
 	   JPanel textBoxPanel = new JPanel(new BorderLayout());
 	   textBoxPanel.add(searchPanel, BorderLayout.NORTH);
@@ -247,7 +243,7 @@ public class theGUI implements ActionListener {
 	   {
 		   mainFrame.setVisible(false);
 		   adminGUI();
-		   userGUI();
+		   //userGUI();
 	   }
 	   
 	   if(event_input.equals("User"))
@@ -273,7 +269,7 @@ public class theGUI implements ActionListener {
 	    	  
 	    	  File selectedFile = jfc.getSelectedFile();
 	    	  System.out.println("File: " + selectedFile);
-	    	  database db = new database();
+	    	  //database db = new database();
 	    	  try 
 	    	  {
 				db.addTxtFiles(selectedFile);
@@ -283,9 +279,9 @@ public class theGUI implements ActionListener {
 			}
 	    	  System.out.println(db.search("the"));
 	       }
-	       //adminFrame.setVisible(false);
-	       //initialGUI();
-	       //initialGUIDetails();
+	       adminFrame.setVisible(false);
+	       initialGUI();
+	       initialGUIDetails();
 	   }
 	   
 	   if(event_input.equals("Submit File"))
