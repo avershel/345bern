@@ -197,24 +197,56 @@ public class theGUI implements ActionListener {
    {
 	   userFrame = new JFrame("User");
 	   userFrame.setSize(400,400);
-	   userFrame.setLayout(new GridLayout(3, 1));
+	   userFrame.setLayout(new BorderLayout());
 	      
 	   headerLabel = new JLabel("",JLabel.CENTER);
-	   	   
+	  
 	   userFrame.setVisible(true);
+	   userGUIdetails();
    }
    
    private void userGUIdetails()
    {
-	   JPanel textBoxPanel = new JPanel(new FlowLayout());
-	      
-	   textBoxPanel.add(new JLabel("Name:"));
-	   textBoxPanel.add(new JTextField(20));
-	   textBoxPanel.add(new JLabel("Author:"));
-	   textBoxPanel.add(new JTextField(20));
+	   JPanel searchLabelPanel = new JPanel(new FlowLayout());
+	   JLabel searchLabel = new JLabel("Enter Search Terms");
+	   JPanel searchPanel = new JPanel(new GridLayout(2,2));
+	   final database db = new database();
 	   
-   }   
-   
+	   final JTextField searchText = new JTextField(15);
+	   final JTextArea resultText = new JTextArea();
+	   resultText.setEditable(false);
+	   
+	   
+	   searchLabelPanel.add(searchLabel);
+	   searchPanel.add(searchLabelPanel);
+	   searchPanel.add(searchText);
+	   
+	   JPanel resultPanel = new JPanel(new BorderLayout());
+	   
+	   JLabel resultLabel = new JLabel("Results");
+	   
+	   resultPanel.add(resultLabel, BorderLayout.NORTH);
+	   resultPanel.add(resultText, BorderLayout.CENTER);
+	   
+	   searchText.addActionListener(new ActionListener(){
+		   public void actionPerformed(ActionEvent e){
+			   resultText.setText(db.search(searchText.getText()));
+           }});
+	   
+	   JButton clearSearch = new JButton("Clear Search");
+	   clearSearch.addActionListener(new ActionListener(){
+		   public void actionPerformed(ActionEvent e){
+			   searchText.setText("");
+			   resultText.setText("");
+           }});
+	   
+	   JPanel textBoxPanel = new JPanel(new BorderLayout());
+	   textBoxPanel.add(searchPanel, BorderLayout.NORTH);
+	   textBoxPanel.add(resultPanel, BorderLayout.CENTER);
+	   userFrame.add(textBoxPanel, BorderLayout.CENTER);
+	   userFrame.add(clearSearch, BorderLayout.SOUTH);
+	   
+   }
    @Override
    public void actionPerformed(ActionEvent e) {
 	   String event_input;
@@ -225,9 +257,19 @@ public class theGUI implements ActionListener {
 	   //Works
 	   if(event_input.equals("Submit"))
 	   {
+		   /*if(event_input.equals("Admin"))
+		   {
+			   mainFrame.setVisible(false);
+			   adminGUI();
+		   }
+		   if(event_input.equals("User"))
+		   {
+			   mainFrame.setVisible(false);
+			   userGUI();
+		   }*/
 		   System.out.println("Admin was selected\n");
 		   mainFrame.setVisible(false);
-		   adminGUI();
+		   userGUI();
 	   }
 	   //Done
 	   if(event_input.equals("Cancel"))
@@ -292,6 +334,7 @@ public class theGUI implements ActionListener {
 	   
    	
    }
+
 
    
 }
