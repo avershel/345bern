@@ -5,13 +5,22 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
+
+/*
+ * theGui
+ * A class that creates the gui
+ * 
+ * @author group 7
+ */
 public class theGUI implements ActionListener {
    //Frames
    private JFrame mainFrame;
    private JFrame adminFrame;
    private JFrame userFrame;
    private JFrame displayFrame;
+   ArrayList<JTextField> list = new ArrayList<JTextField>();
    
    
    database db = new database();
@@ -30,18 +39,31 @@ public class theGUI implements ActionListener {
    private JLabel headerLabel;
    private JLabel statusLabel;
 
+   
+	/*
+	 * A gui constructor
+	 * 
+	 */
    public theGUI() 
    {
       initialGUI();
    }
 
+	/*
+	 * main
+	 * 
+	 */
    public static void main(String[] args)
    {
       theGUI gutenGUI = new theGUI();  
       gutenGUI.initialGUIDetails();     
    }
    
-   //Initial GUI #1
+   
+	/*
+	 * creates initial gui
+	 * 
+	 */
    private void initialGUI()
    {
       mainFrame = new JFrame("GutenSearch");
@@ -74,7 +96,10 @@ public class theGUI implements ActionListener {
       mainFrame.setVisible(true);  
    }
    
-   //Initial GUI #2
+	/*
+	 * creates initial gui #2
+	 * 
+	 */
    private void initialGUIDetails()
    {
       headerLabel.setText("Admin or User?");      
@@ -115,6 +140,10 @@ public class theGUI implements ActionListener {
    }
    
    //-----------------------------------------------------------
+	/*
+	 * creates admin gui
+	 * 
+	 */
    private void adminGUI()
    {
 	   adminFrame = new JFrame("Admin"); 
@@ -131,29 +160,60 @@ public class theGUI implements ActionListener {
 
        JPanel oldTitleBoxPanel = new JPanel(new FlowLayout());
        oldTitleBoxPanel.add(new JLabel("Old Title*: " ));
-   	   oldTitleBoxPanel.add(new JTextField(20));
-   	   
-       JPanel newTitleBoxPanel = new JPanel(new FlowLayout());
-       newTitleBoxPanel.add(new JLabel("New Title: " ));
-   	   newTitleBoxPanel.add(new JTextField(20));
+       JTextField ottf = new JTextField(20);
+
+   	   oldTitleBoxPanel.add(ottf);
    	   
        JPanel oldAuthorBoxPanel = new JPanel(new FlowLayout());
        oldAuthorBoxPanel.add(new JLabel("Old Author*: " ));
-   	   oldAuthorBoxPanel.add(new JTextField(20));
+       JTextField oatf = new JTextField(20);
+
+   	   oldAuthorBoxPanel.add(oatf);
+   	   
+       JPanel newTitleBoxPanel = new JPanel(new FlowLayout());
+       newTitleBoxPanel.add(new JLabel("New Title: " ));
+       JTextField nttf = new JTextField(20);
+
+   	   newTitleBoxPanel.add(nttf);
+   	   
+//       JPanel oldAuthorBoxPanel = new JPanel(new FlowLayout());
+//       oldAuthorBoxPanel.add(new JLabel("Old Author*: " ));
+//   	   oldAuthorBoxPanel.add(new JTextField(20));
    	   
        JPanel newAuthorBoxPanel = new JPanel(new FlowLayout());
        newAuthorBoxPanel.add(new JLabel("New Author: " ));
-   	   newAuthorBoxPanel.add(new JTextField(20));
+       JTextField natf = new JTextField(20);
+   	   newAuthorBoxPanel.add(natf);
+   	   
+       JButton editSource = new JButton("Edit Source");
+       adminButtonPanel.add(editSource);
+       editSource.addActionListener(this);
+       
+       list.add(ottf);
+       list.add(nttf);
+       list.add(oatf);
+       list.add(natf);
+
+
+       
+       
+       //System.out.println("oatf == " + oatf.getText());
+       //db.editBook(list.get(0).getText(), list.get(1).getText(), list.get(2).getText(), list.get(3).getText());
    	   
        adminFrame.add(adminButtonPanel);
        adminFrame.add(oldTitleBoxPanel);
        adminFrame.add(newTitleBoxPanel);
        adminFrame.add(oldAuthorBoxPanel);
        adminFrame.add(newAuthorBoxPanel);
+       //adminFrame.add(editSource);
       
 	   adminFrame.setVisible(true);
    }
    
+	/*
+	 * creates display pane
+	 * 
+	 */
    private void displayPane()
    {
 	   displayFrame = new JFrame("Output");
@@ -161,6 +221,10 @@ public class theGUI implements ActionListener {
    }
    
    //-----------------------------------------------------------
+	/*
+	 * creates user gui
+	 * 
+	 */
    private void userGUI()
    {
 	   userFrame = new JFrame("User");
@@ -173,6 +237,10 @@ public class theGUI implements ActionListener {
 	   userGUIdetails();
    }
    
+	/*
+	 * creates user gui details
+	 * 
+	 */
    private void userGUIdetails()
    {
 	   JPanel searchLabelPanel = new JPanel(new FlowLayout());
@@ -232,6 +300,11 @@ public class theGUI implements ActionListener {
 	   userFrame.add(info, BorderLayout.SOUTH);
 	   
    }
+   
+	/*
+	 * action performed listener
+	 * 
+	 */
    @Override
    public void actionPerformed(ActionEvent e) {
 	   String event_input;
@@ -277,11 +350,16 @@ public class theGUI implements ActionListener {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-	    	  System.out.println(db.search("the"));
+	    	  //System.out.println(db.search("the"));
 	       }
 	       adminFrame.setVisible(false);
 	       initialGUI();
 	       initialGUIDetails();
+	   }
+	   
+	   if(event_input.equals("Edit Source"))
+	   {
+	       db.editBook(list.get(0).getText(), list.get(1).getText(), list.get(2).getText(), list.get(3).getText());
 	   }
 	   
 	   if(event_input.equals("Submit File"))
