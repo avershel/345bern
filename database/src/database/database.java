@@ -7,12 +7,21 @@ import java.io.FileReader;
 import java.io.IOException;
 //import java.util.Collection;
 import java.util.HashMap;
-
+/*
+ * database
+ * A class that creates a database
+ * 
+ * @author group 7
+ */
 public class database {
 	public static HashMap<String, bucket> buckets;
 	public static int arrindex = 0;
 	public static HashMap<String, paragraphObject> pomap;
 
+	/*
+	 * A paragraphObject constructor
+	 * 
+	 */
 	public database()
 	{
 		buckets = new HashMap<String,bucket>();
@@ -20,12 +29,23 @@ public class database {
 
 	}
 	
+	/*
+	 * A helper method to add text files to the database
+	 * 
+	 * @param filename -the file to add
+	 *
+	 */
 	public void addTxtFiles(File filename) throws FileNotFoundException, IOException
 	{
 		parseText(readFile(filename.toString()));
 	}
 
-	
+	/*
+	 * A helper method to read files to the database
+	 * 
+	 * @param filename -the file to read
+	 *
+	 */
 	public static String readFile(String fileName) throws IOException 
 	{
 	    BufferedReader buffread = new BufferedReader(new FileReader(fileName));
@@ -58,6 +78,7 @@ public class database {
 		String title = "";
 		int index;
 	    String[] paragraphs = text.split("\n\n");
+	    
 	    for (String paragraph : paragraphs) 
 	    {
 	        String arr[] = paragraph.split(" ");
@@ -71,10 +92,8 @@ public class database {
 	        	//System.out.println("The Author is: " + author);
 	            
 	        }
-	        System.out.println(arr[0]);
-	        if(arr[0].equals("Title:"))
+	        if(arr[0].equals("\nTitle:"))
 	        {
-	        	System.out.println("this is the array"+ arr[0]);
 	        	for(int j = 1; j<arr.length; j++)
 	        	{
 	        		title += arr[j];
@@ -105,7 +124,12 @@ public class database {
 	    }
 	}
 	
-	
+	/*
+	 * A helper method to search the database
+	 * 
+	 * @param query - the term(s) to search
+	 *
+	 */
 	public String search(String query)
 	{
 		return new search1(query).results();
