@@ -75,11 +75,11 @@ public class search1 {
 			{
 				for(paragraphObject po : b)
 				{
-					l2.add(po);
+					l1.add(po);
 
 				}
-				l1.retainAll(l2);
-				l2.clear();
+//				l1.retainAll(l2);
+//				l2.clear();
 			}
 	}
 	
