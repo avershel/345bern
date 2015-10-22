@@ -8,6 +8,7 @@ import java.util.Set;
 public class bucket implements Iterable<paragraphObject>{
 	public String key;
 	public Set<paragraphObject> parList = new HashSet<paragraphObject>();
+	public int size = 0;
 	
 	public bucket(String bucketKey)
 	{
@@ -17,6 +18,7 @@ public class bucket implements Iterable<paragraphObject>{
 	public void addParObject(paragraphObject po)
 	{
 		this.parList.add(po);
+		size++;
 	}
 	
 	public String toString()
