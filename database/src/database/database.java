@@ -1,105 +1,155 @@
 package gutenSearch;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-//import java.util.Collection;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
-public class database {
-	public static HashMap<String, bucket> buckets;
+public class search1 {
+	
+	String [] termArray;
+	List<paragraphObject> l1 = new ArrayList<paragraphObject>();
+	List<paragraphObject> l2 = new ArrayList<paragraphObject>();
+	String []expholder;
+	int index = 0;
 
-	public database()
+	public search1(String query)
 	{
-		buckets = new HashMap<String,bucket>();
-	}
-	
-	public void addTxtFiles(String filename) throws FileNotFoundException, IOException
-	{
-		parseText(readFile(filename));
-	}
-
-	
-	public static String readFile(String fileName) throws IOException 
-	{
-	    BufferedReader buffread = new BufferedReader(new FileReader(fileName));
-	    try 
-	    {
-	        StringBuilder stringbuild = new StringBuilder();
-	        String line = buffread.readLine();
-
-	        while (line != null) {
-	        	stringbuild.append(line);
-	        	stringbuild.append("\n");
-	            line = buffread.readLine();
-	        }
-	        return stringbuild.toString();
-	    } 
-	    finally 
-	    {
-	    	buffread.close();
-	    }
-	}
-	
-	/**
-	 * Takes in string object(the full text) 
-	 * extracts title, author, converts to paragraph objects
-	 * @param text - the full text file
-	 */
-	public static void parseText(String text) 
-	{
-		String author = "";
-		String title = "";
-		int index;
-	    String[] paragraphs = text.split("\n");
-	    for (String paragraph : paragraphs) 
-	    {
-	        String arr[] = paragraph.split(" ");
-	        if(arr[0].equals("Author:"))
-	        {
-	        	for(int i = 1; i<arr.length; i++)
-	        	{
-	        		author += arr[i];
-	        		author += " ";
-	        	}
-	        	//System.out.println("The Author is: " + author);
-	            
-	        }
-	        
-	        if(arr[0].equals("Title:"))
-	        {
-	        	for(int i = 1; i<arr.length; i++)
-	        	{
-	        		title += arr[i];
-	        		title += " ";
-	        	}
-	        	//System.out.println("The Title is: " + title);
-	        }
-	        
-	    }
-	    index = 1;
-	    for (String paragraph : paragraphs) 
-	    {
-	    	if(!paragraph.equals(""))
-	    	{
-	    		//new paragraph object
-	    		//set title
-	    		//set author
-	    		//set paragraph
-	    		new paragraphObject(paragraph, title, author, index);
-	    		index ++;
-	    		//System.out.println("Paragraph: " + paragraph.trim());
-	    
-	    	}
-	    }
-	}
-	
-	
-	public String search(String query)
-	{
-		return new search(query).results();
 		
+		
+		String[] firstWord1 = query.split("\\&| |\\|");
+		for(String str : firstWord1)
+		{
+			bucket b = database.buckets.get(str);
+			if(b != null)
+			{
+				for(paragraphObject po : b)
+				{
+					l1.add(po);
+
+				}
+
+			}
+		}
+
+		query = query.toLowerCase();
+		String[] firstWord = query.split("\\|");
+		termArray = new String[firstWord.length];
+		expholder = new String[firstWord.length];
+
+		for(String word: firstWord)
+		{
+			parseOr(word);
+		}
+		
+
+	}
+	
+	public void parseOr(String exp)
+	{
+		if(exp.indexOf('&') >= 0)
+		{
+			expholder = exp.split("\\&");
+
+			parseAnd(expholder);
+
+		}
+		else
+		{
+			expholder = exp.split(" ");
+			for(String e : expholder)
+			{
+				addPars(e);
+			}
+			
+		}
+		
+	}
+	
+	//adds single word buckets to query
+	public void addPars(String exp)
+	{
+		
+			bucket b = database.buckets.get(exp);
+			if(b != null)
+			{
+				for(paragraphObject po : b)
+				{
+					l1.add(po);
+
+				}
+//				l1.retainAll(l2);
+//				l2.clear();
+			}
+	}
+	
+	public void parseAnd(String[] holder)
+	{
+		List<paragraphObject> ll1 = new ArrayList<paragraphObject>();
+		List<paragraphObject> ll2 = new ArrayList<paragraphObject>();
+		index = 0;
+		for(int i = 0; i < holder.length; i++)
+		{
+			if(index == 0)
+			{
+
+				bucket b = database.buckets.get(holder[i]);
+				if(b != null)
+				{
+					for(paragraphObject po : b)
+					{
+						ll1.add(po);
+
+					}
+					index++;
+
+				}
+			}
+			else
+			{
+
+				bucket b = database.buckets.get(holder[i]);
+				if(b != null)
+				{
+					for(paragraphObject po : b)
+					{
+						ll2.add(po);
+
+					}
+					ll1.retainAll(ll2);
+					ll2.clear();
+
+				}
+			}
+		}
+		
+
+		l1.retainAll(ll1);
+
+	}
+	
+	
+	public String results()
+	{
+		
+		
+		
+		Set<paragraphObject> hld = new LinkedHashSet<>(l1);
+		l1.clear();
+		l1.addAll(hld);
+		
+		String str = "";
+		if(l1.size() > 0)
+		{
+			for(paragraphObject po: l1)
+			{
+				str += po.toString();
+			}
+			return str;
+		}
+		else
+		{
+			return "QUERY TERM NOT FOUND";
+		}
 	}
 }
