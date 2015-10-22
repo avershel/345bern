@@ -1,4 +1,4 @@
-package gutenSearch;
+package theGutenSearch;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -84,60 +84,27 @@ public class theGUI implements ActionListener {
       layout.setHgap(10);
       layout.setVgap(10);
       choicePanel.setLayout(layout);        
+	             
+      JPanel choiceButtonPanel = new JPanel();
       
-      //START CHOICES FOR ADMIN OR USER
+      JButton adminButton = new JButton("Admin");
+      choiceButtonPanel.add(adminButton);
+      adminButton.addActionListener(this);
       
-      JComboBox listCombo = new JComboBox();
-      listCombo.addItem("Admin");
-      listCombo.addItem("User");
-      listCombo.setSelectedIndex(0);
-      listCombo.addActionListener(this);
-	  
-      JScrollPane listComboScrollPane = new JScrollPane(listCombo); 
+      JButton userButton = new JButton("User");
+      choiceButtonPanel.add(userButton);
+      userButton.addActionListener(this);
       
-      //END CHOICES FOR ADMIN OR USER
-      
-      //SUBMIT & CANCEL
       JPanel buttonPanel = new JPanel();
-      
-      JButton submitButton = new JButton("Submit");
-      buttonPanel.add(submitButton);
       
       JButton cancelButton = new JButton("Cancel");
       buttonPanel.add(cancelButton);  
       
-      submitButton.addActionListener(this);
       cancelButton.addActionListener(this);
-
-
-//      submitButton.addActionListener(new ActionListener() 
-//      {
-//          public void actionPerformed(ActionEvent event) 
-//          {
-//              JComboBox listCombo = (JComboBox) event.getSource();
-//              
-//              String something = event.getActionCommand();
-//              
-//              //Object selected = listCombo.getSelectedItem();
-//              
-//              if(something.equals("Admin"))
-//              {
-//            	  mainFrame.setVisible(false);
-//            	  adminGUI();
-//              }
-//              else if(something.equals("User"))
-//              {
-//            	  mainFrame.setVisible(false);
-//            	  userGUI();
-//              }
-//          }
-//      });
-      
-      //END SUBMIT & CANCEL
 
       choicePanel.add(buttonPanel);
 
-      controlPanel.add(listComboScrollPane);
+      controlPanel.add(choiceButtonPanel);
 	  controlPanel.add(choicePanel);
 
       mainFrame.setVisible(true);  
@@ -149,7 +116,7 @@ public class theGUI implements ActionListener {
    {
 	   adminFrame = new JFrame("Admin"); 
 	   adminFrame.setSize(400,400);
-	   adminFrame.setLayout(new GridLayout(3, 1));	   
+	   adminFrame.setLayout(new GridLayout(6, 1));	   
 	   
 	   headerLabel = new JLabel("",JLabel.CENTER);
 	   	   
@@ -158,38 +125,36 @@ public class theGUI implements ActionListener {
        JButton chooseFile = new JButton("Choose File");
        adminButtonPanel.add(chooseFile);
        chooseFile.addActionListener(this);
-      
-      
-       //JPanel textBoxPanel = new JPanel(new FlowLayout());
-       //textBoxPanel.add(new JLabel("File:" ));
-   	   //textBoxPanel.add(new JTextField(20));
+
+       JPanel oldTitleBoxPanel = new JPanel(new FlowLayout());
+       oldTitleBoxPanel.add(new JLabel("Old Title*: " ));
+   	   oldTitleBoxPanel.add(new JTextField(20));
    	   
-      
-       JButton submitFile = new JButton("Submit File");
-       adminButtonPanel.add(submitFile);
-       submitFile.addActionListener(this);
-	  
+       JPanel newTitleBoxPanel = new JPanel(new FlowLayout());
+       newTitleBoxPanel.add(new JLabel("New Title: " ));
+   	   newTitleBoxPanel.add(new JTextField(20));
+   	   
+       JPanel oldAuthorBoxPanel = new JPanel(new FlowLayout());
+       oldAuthorBoxPanel.add(new JLabel("Old Author*: " ));
+   	   oldAuthorBoxPanel.add(new JTextField(20));
+   	   
+       JPanel newAuthorBoxPanel = new JPanel(new FlowLayout());
+       newAuthorBoxPanel.add(new JLabel("New Author: " ));
+   	   newAuthorBoxPanel.add(new JTextField(20));
+   	   
        adminFrame.add(adminButtonPanel);
-       //adminFrame.add(textBoxPanel);
+       adminFrame.add(oldTitleBoxPanel);
+       adminFrame.add(newTitleBoxPanel);
+       adminFrame.add(oldAuthorBoxPanel);
+       adminFrame.add(newAuthorBoxPanel);
       
 	   adminFrame.setVisible(true);
    }
    
-   private void adminGUIdetails()
-   {
-	   JPanel textBoxPanel = new JPanel(new FlowLayout());
-	      
-	   textBoxPanel.add(new JLabel("Keywords:"));
-	   textBoxPanel.add(new JTextField(20));
-   }
-   //------------------------------------------------------------
-   
    private void displayPane()
    {
 	   displayFrame = new JFrame("Output");
-	   displayFrame.setSize(400,400);
-
-	   
+	   displayFrame.setSize(400,400);  
    }
    
    //-----------------------------------------------------------
@@ -254,27 +219,22 @@ public class theGUI implements ActionListener {
 	   event_input =  e.getActionCommand();
 	   System.out.println("event_input is: \n" + event_input);
 	   
-	   //Works
-	   if(event_input.equals("Submit"))
+	   if(event_input.equals("Admin"))
 	   {
-		   /*if(event_input.equals("Admin"))
-		   {
-			   mainFrame.setVisible(false);
-			   adminGUI();
-		   }
-		   if(event_input.equals("User"))
-		   {
-			   mainFrame.setVisible(false);
-			   userGUI();
-		   }*/
-		   System.out.println("Admin was selected\n");
+		   mainFrame.setVisible(false);
+		   adminGUI();
+	   }
+	   
+	   if(event_input.equals("User"))
+	   {
 		   mainFrame.setVisible(false);
 		   userGUI();
 	   }
-	   //Done
+	   
 	   if(event_input.equals("Cancel"))
 	   {
 		   mainFrame.setVisible(false);
+		   System.exit(1);
 	   }
 	   
 	   if(event_input.equals("Choose File"))
@@ -296,17 +256,7 @@ public class theGUI implements ActionListener {
 				e1.printStackTrace();
 			}
 	    	  System.out.println(db.search("the"));
-	    	  //file_name = selectedFile.getName();
-	    	  //JLabel theName = new JLabel();
-	    	  //theName.setText(file_name);
-	          //JPanel textBoxPanel = new JPanel();
-	          //textBoxPanel.add(new JLabel("File:" + selectedFile));
-	      	  //textBoxPanel.add(new JTextField(20));	  
-	      	  //System.out.print(theName);
-	       }
-	       
-	       //JTextArea text = new JTextArea();
-	       
+	       }       
 	   }
 	   
 	   if(event_input.equals("Submit File"))
@@ -315,26 +265,5 @@ public class theGUI implements ActionListener {
 		   displayPane();
 		   
 	   }
-	   /*
-	      showButton.addActionListener(new ActionListener() 
-	      {
-	         public void actionPerformed(ActionEvent e) 
-	         { 
-	            String data = "";
-	            if (listCombo.getSelectedIndex() != -1) 
-	            {  
-	               CardLayout cardLayout = (CardLayout)(choicePanel.getLayout());
-	               cardLayout.show(choicePanel, 
-	               (String)listCombo.getItemAt(listCombo.getSelectedIndex()));	               
-	            }              
-	            statusLabel.setText(data);
-	         }
-	      }); 
-	      */
-	   
-   	
-   }
-
-
-   
+   } 
 }
