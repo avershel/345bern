@@ -57,7 +57,7 @@ public class database {
 		String author = "";
 		String title = "";
 		int index;
-	    String[] paragraphs = text.split("\n");
+	    String[] paragraphs = text.split("\n\n");
 	    for (String paragraph : paragraphs) 
 	    {
 	        String arr[] = paragraph.split(" ");
@@ -71,12 +71,13 @@ public class database {
 	        	//System.out.println("The Author is: " + author);
 	            
 	        }
-	        
+	        System.out.println(arr[0]);
 	        if(arr[0].equals("Title:"))
 	        {
-	        	for(int i = 1; i<arr.length; i++)
+	        	System.out.println("this is the array"+ arr[0]);
+	        	for(int j = 1; j<arr.length; j++)
 	        	{
-	        		title += arr[i];
+	        		title += arr[j];
 	        		title += " ";
 	        	}
 	        	//System.out.println("The Title is: " + title);
