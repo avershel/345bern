@@ -1,4 +1,4 @@
-package gutenSearch;
+package theGutenSearch;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -20,9 +20,9 @@ public class database {
 
 	}
 	
-	public void addTxtFiles(String filename) throws FileNotFoundException, IOException
+	public void addTxtFiles(File filename) throws FileNotFoundException, IOException
 	{
-		parseText(readFile(filename));
+		parseText(readFile(filename.toString()));
 	}
 
 	
