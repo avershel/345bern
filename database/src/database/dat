@@ -1,0 +1,26 @@
+	public void addTxtFiles(File filename) throws FileNotFoundException, IOException
+	{
+		parseText(readFile(filename.toString()));
+	}
+
+	
+	public static String readFile(String fileName) throws IOException 
+	{
+	    BufferedReader buffread = new BufferedReader(new FileReader(fileName));
+	    try 
+	    {
+	        StringBuilder stringbuild = new StringBuilder();
+	        String line = buffread.readLine();
+
+	        while (line != null) {
+	        	stringbuild.append(line);
+	        	stringbuild.append("\n");
+	            line = buffread.readLine();
+	        }
+	        return stringbuild.toString();
+	    } 
+	    finally 
+	    {
+	    	buffread.close();
+	    }
+	}
