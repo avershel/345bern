@@ -5,14 +5,21 @@ public class paragraphObject {
 	public int ordinal;
 	public String author;
 	public String paragraph;
+	public int arrindex;
 	
-	public paragraphObject(String paragraph1, String title1, String author1, int ord)
+	public paragraphObject(String paragraph1, String title1, String author1, int ord, int i)
 	{
+		arrindex = i;
 		ordinal = ord;
 		paragraph = paragraph1;
 		title = title1;
 		author = author1;
 		//eliminate symbols, split by " "
+
+	}
+	
+	public void parse()
+	{
 		String[] words = paragraph.replaceAll("[^a-zA-Z ]", "").toLowerCase().split("\\s+");
 		for(String s: words)
 		{
@@ -26,13 +33,14 @@ public class paragraphObject {
 		bucket value = database.buckets.get(key);
 		//if the bucket exists
 		if (value != null) {
-		    value.addParObject(this);
+		    value.addParObject(database.pomap.get(Integer.toString(arrindex)));
 		    database.buckets.put(key, value);
 			
 		} else {
 
 				bucket buck = new bucket(key);
-			    buck.addParObject(this);
+				paragraphObject p = database.pomap.get(Integer.toString(arrindex));
+			    buck.addParObject(p);
 			    database.buckets.put(key, buck);	
 			
 		}
@@ -74,4 +82,8 @@ public class paragraphObject {
 		str += paragraph + "\n";
 		return str;
 	}
+	
+
+	
+	
 }
