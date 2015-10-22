@@ -16,7 +16,7 @@ public class theGUI implements ActionListener {
    //File Chooser
    JFileChooser jfc;
    Container contentPane;
-   private JFileChooser chooseFile;
+   private JFileChooser uploadFile;
    private JFrame theFile;
    int retval;
    
@@ -122,9 +122,9 @@ public class theGUI implements ActionListener {
 	   	   
        JPanel adminButtonPanel = new JPanel();
       
-       JButton chooseFile = new JButton("Choose File");
-       adminButtonPanel.add(chooseFile);
-       chooseFile.addActionListener(this);
+       JButton uploadFile = new JButton("Upload File");
+       adminButtonPanel.add(uploadFile);
+       uploadFile.addActionListener(this);
 
        JPanel oldTitleBoxPanel = new JPanel(new FlowLayout());
        oldTitleBoxPanel.add(new JLabel("Old Title*: " ));
@@ -173,25 +173,33 @@ public class theGUI implements ActionListener {
    private void userGUIdetails()
    {
 	   JPanel searchLabelPanel = new JPanel(new FlowLayout());
+	   JPanel searchInputPanel = new JPanel(new FlowLayout());
 	   JLabel searchLabel = new JLabel("Enter Search Terms");
-	   JPanel searchPanel = new JPanel(new GridLayout(2,2));
+	   JPanel searchPanel = new JPanel(new BorderLayout());
 	   final database db = new database();
 	   
-	   final JTextField searchText = new JTextField(15);
-	   final JTextArea resultText = new JTextArea();
+	   
+	   final JTextField searchText = new JTextField(25);
+	   final JTextArea resultText = new JTextArea(40, 40);
 	   resultText.setEditable(false);
 	   
 	   
 	   searchLabelPanel.add(searchLabel);
-	   searchPanel.add(searchLabelPanel);
-	   searchPanel.add(searchText);
+	   searchInputPanel.add(searchText);
+	   searchPanel.add(searchLabelPanel, BorderLayout.NORTH);
+	   searchPanel.add(searchInputPanel, BorderLayout.CENTER);
 	   
-	   JPanel resultPanel = new JPanel(new BorderLayout());
 	   
+	   JPanel resultLabelPanel = new JPanel(new FlowLayout());
+	   JPanel resultOutputPanel = new JPanel(new FlowLayout());
 	   JLabel resultLabel = new JLabel("Results");
+	   JPanel resultPanel = new JPanel(new BorderLayout());
+	   JScrollPane scrollPane = new JScrollPane(resultText);
 	   
-	   resultPanel.add(resultLabel, BorderLayout.NORTH);
-	   resultPanel.add(resultText, BorderLayout.CENTER);
+	   resultLabelPanel.add(resultLabel);
+	   resultOutputPanel.add(scrollPane);
+	   resultPanel.add(resultLabelPanel, BorderLayout.NORTH);
+	   resultPanel.add(resultOutputPanel, BorderLayout.CENTER);
 	   
 	   searchText.addActionListener(new ActionListener(){
 		   public void actionPerformed(ActionEvent e){
@@ -205,11 +213,27 @@ public class theGUI implements ActionListener {
 			   resultText.setText("");
            }});
 	   
+	   JPanel clearPanel = new JPanel(new FlowLayout());
+	   clearPanel.add(clearSearch);
+	   resultPanel.add(clearPanel, BorderLayout.SOUTH);
+	   
+	   JPanel info = new JPanel(new FlowLayout());
+	   
+	   JLabel triviaLabel = new JLabel("The search looked through the following number of paragraphs: ");
+	   
+	   
+	   JPanel trivia = new JPanel(new BorderLayout());
+	   trivia.add(triviaLabel, BorderLayout.EAST);
+	   
+	   
+	   info.add(trivia);
+	   
+	   
 	   JPanel textBoxPanel = new JPanel(new BorderLayout());
 	   textBoxPanel.add(searchPanel, BorderLayout.NORTH);
 	   textBoxPanel.add(resultPanel, BorderLayout.CENTER);
 	   userFrame.add(textBoxPanel, BorderLayout.CENTER);
-	   userFrame.add(clearSearch, BorderLayout.SOUTH);
+	   userFrame.add(info, BorderLayout.SOUTH);
 	   
    }
    @Override
@@ -223,6 +247,7 @@ public class theGUI implements ActionListener {
 	   {
 		   mainFrame.setVisible(false);
 		   adminGUI();
+		   userGUI();
 	   }
 	   
 	   if(event_input.equals("User"))
@@ -237,7 +262,7 @@ public class theGUI implements ActionListener {
 		   System.exit(1);
 	   }
 	   
-	   if(event_input.equals("Choose File"))
+	   if(event_input.equals("Upload File"))
 	   {
 		   jfc = new JFileChooser();
 		   retval = jfc.showOpenDialog(theFile);
@@ -249,21 +274,24 @@ public class theGUI implements ActionListener {
 	    	  File selectedFile = jfc.getSelectedFile();
 	    	  System.out.println("File: " + selectedFile);
 	    	  database db = new database();
-	    	  try {
+	    	  try 
+	    	  {
 				db.addTxtFiles(selectedFile);
-			} catch (IOException e1) {
+	    	  } catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 	    	  System.out.println(db.search("the"));
-	       }       
+	       }
+	       //adminFrame.setVisible(false);
+	       //initialGUI();
+	       //initialGUIDetails();
 	   }
 	   
 	   if(event_input.equals("Submit File"))
 	   {
 		   //Here the file should be fed to the code that parses it
 		   displayPane();
-		   
 	   }
    } 
 }
