@@ -1,0 +1,165 @@
+package GutenSearch;
+
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Writer;
+import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+/*
+ * AdminGUI
+ * A class that creates the administrator GUI
+ *
+ * @author group 7
+ */
+public class AdminGUI
+{
+
+  ArrayList<JTextField> list = new ArrayList<JTextField>();
+  Database db = new Database();
+
+  /*
+   * main
+   */
+  public static void main(String[] args)
+  {
+    AdminGUI gui = new AdminGUI();
+    gui.adminGUI();
+  }
+
+  private void adminGUI()
+  {
+    JFrame adminFrame = new JFrame("Admin");
+    adminFrame.setSize(800, 800);
+    adminFrame.setLayout(new GridLayout(6, 1));
+
+    JPanel adminButtonPanel = new JPanel();
+
+    JButton uploadFile = new JButton("Choose File");
+    adminButtonPanel.add(uploadFile);
+    uploadFile.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        JFrame theFile = new JFrame();
+        JFileChooser jfc = new JFileChooser();
+        int retval = jfc.showOpenDialog(theFile);
+
+        if (retval == JFileChooser.APPROVE_OPTION)
+        {
+
+          File selectedFile = jfc.getSelectedFile();
+          System.out.println("File: " + selectedFile);
+          try
+          {
+        	  String str = selectedFile.toString();
+        	  String[] holder = str.split("/");
+        	  System.out.println("name = " + holder[holder.length-1]);
+        	  
+        	 // selectedFile.renameTo(new File("C://cs//home//stu//fowlerne//Desktop//text//" + selectedFile.getName()));
+        	  File dest = new File("//cs//home//stu//fowlerne//Desktop//text//" + holder[holder.length-1]);
+        	  dest.getParentFile().mkdirs();
+        	  dest.createNewFile();
+              //Writer output = new BufferedWriter(new FileWriter(dest));
+           // db.addTxtFiles(selectedFile);
+        	  InputStream input = null;
+        	  
+        	  	    OutputStream output = null;
+        	  
+        	  	    try {
+        	  
+        	  	        input = new FileInputStream(selectedFile);
+        	  
+        	  	        output = new FileOutputStream(dest);
+        	  
+        	  	        byte[] buf = new byte[1024];
+        	  
+        	  	        int bytesRead;
+        	  
+        	  	        while ((bytesRead = input.read(buf)) > 0) {
+        	  
+        	  	            output.write(buf, 0, bytesRead);
+        	  
+        	  	        }
+        	  
+        	  	    } finally {
+        	  
+        	  	        input.close();
+        	  
+        	  	        output.close();
+        	  
+        	  	    }
+          }
+          catch (IOException e1)
+          {
+            e1.printStackTrace();
+          }
+        }
+        ;
+      }
+    });
+
+    JPanel oldTitleBoxPanel = new JPanel(new FlowLayout());
+    oldTitleBoxPanel.add(new JLabel("Old Title*: "));
+    JTextField ottf = new JTextField(20);
+
+    oldTitleBoxPanel.add(ottf);
+
+    JPanel oldAuthorBoxPanel = new JPanel(new FlowLayout());
+    oldAuthorBoxPanel.add(new JLabel("Old Author*: "));
+    JTextField oatf = new JTextField(20);
+
+    oldAuthorBoxPanel.add(oatf);
+
+    JPanel newTitleBoxPanel = new JPanel(new FlowLayout());
+    newTitleBoxPanel.add(new JLabel("New Title: "));
+    JTextField nttf = new JTextField(20);
+
+    newTitleBoxPanel.add(nttf);
+
+    JPanel newAuthorBoxPanel = new JPanel(new FlowLayout());
+    newAuthorBoxPanel.add(new JLabel("New Author: "));
+    JTextField natf = new JTextField(20);
+    newAuthorBoxPanel.add(natf);
+
+    JButton editSource = new JButton("Edit Source");
+    adminButtonPanel.add(editSource);
+    editSource.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        db.editBook(list.get(0).getText(), list.get(1).getText(), list.get(2).getText(), list
+            .get(3).getText());
+      }
+    });
+
+    list.add(ottf);
+    list.add(nttf);
+    list.add(oatf);
+    list.add(natf);
+
+    adminFrame.add(adminButtonPanel);
+    adminFrame.add(oldTitleBoxPanel);
+    adminFrame.add(newTitleBoxPanel);
+    adminFrame.add(oldAuthorBoxPanel);
+    adminFrame.add(newAuthorBoxPanel);
+
+    adminFrame.setVisible(true);
+  }
+}
