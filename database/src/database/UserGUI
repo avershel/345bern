@@ -1,0 +1,129 @@
+package GutenSearch;
+
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+/*
+ * UserGUI
+ * Class that creates the User GUI
+ *
+ * @author group 7
+ */
+public class UserGUI
+{
+  Database db = new Database();
+  JFrame userFrame;
+
+
+
+  public static void main(String[] args)
+  {
+    UserGUI userGUI = new UserGUI();
+    userGUI.userGUI();
+  }
+
+  /*
+   * creates user GUI
+   *
+   */
+  private void userGUI()
+  {
+    userFrame = new JFrame("User");
+    userFrame.setSize(800,800);
+    userFrame.setLayout(new BorderLayout());
+    userGUIdetails();
+    userFrame.setVisible(true);
+
+  }
+
+  /*
+   * creates user GUI details
+   *
+   */
+  private void userGUIdetails()
+  {
+	  
+	    File folder = new File("/cs/home/stu/fowlerne/Desktop/text");
+	    File[] listOfFiles = folder.listFiles();
+	 
+	    for (int i = 0; i < listOfFiles.length; i++) {
+	      File file = listOfFiles[i];
+	      if (file.isFile() ) {
+	        try
+	        {
+	          db.addTxtFiles(file);
+	        }
+	        catch (FileNotFoundException e1)
+	        {
+	          // TODO Auto-generated catch block
+	          e1.printStackTrace();
+	        }
+	        catch (IOException e1)
+	        {
+	          // TODO Auto-generated catch block
+	          e1.printStackTrace();
+	        }
+	        //String content = FileUtils.readFileToString(file);
+	        /* do somthing with content */
+	      }
+	    }
+    JPanel searchLabelPanel = new JPanel(new FlowLayout());
+    JPanel searchInputPanel = new JPanel(new FlowLayout());
+    JLabel searchLabel = new JLabel("Enter Search Terms");
+    JPanel searchPanel = new JPanel(new BorderLayout());
+
+    final JTextField searchText = new JTextField(25);
+    final JTextArea resultText = new JTextArea();
+    resultText.setLineWrap(true);
+    resultText.setEditable(false);
+
+    searchLabelPanel.add(searchLabel);
+    searchInputPanel.add(searchText);
+    searchPanel.add(searchLabelPanel, BorderLayout.NORTH);
+    searchPanel.add(searchInputPanel, BorderLayout.CENTER);
+
+    JPanel resultLabelPanel = new JPanel(new FlowLayout());
+    JLabel resultLabel = new JLabel("Results");
+    JPanel resultPanel = new JPanel(new BorderLayout());
+    JScrollPane scrollPane = new JScrollPane(resultText);
+
+    resultLabelPanel.add(resultLabel);
+    resultPanel.add(resultLabelPanel, BorderLayout.NORTH);
+    resultPanel.add(scrollPane, BorderLayout.CENTER);
+
+    searchText.addActionListener(new ActionListener(){
+      public void actionPerformed(ActionEvent e){
+        resultText.setText(db.search(searchText.getText()));
+      }});
+
+    JButton clearSearch = new JButton("Clear Search");
+    clearSearch.addActionListener(new ActionListener(){
+      public void actionPerformed(ActionEvent e){
+        searchText.setText("");
+        resultText.setText("");
+      }});
+
+    JPanel clearPanel = new JPanel(new FlowLayout());
+    clearPanel.add(clearSearch);
+    resultPanel.add(clearPanel, BorderLayout.SOUTH);
+
+    JPanel textBoxPanel = new JPanel(new BorderLayout());
+    textBoxPanel.add(searchPanel, BorderLayout.NORTH);
+    textBoxPanel.add(resultPanel, BorderLayout.CENTER);
+    userFrame.add(textBoxPanel, BorderLayout.CENTER);
+
+  }
+}
