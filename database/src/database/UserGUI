@@ -1,13 +1,16 @@
 package GutenSearch;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -41,12 +44,41 @@ public class UserGUI
    */
   private void userGUI()
   {
-    userFrame = new JFrame("User");
+    final JFrame welcomeFrame = new JFrame("GutenSearch");
+    welcomeFrame.setSize(800,800);
+    welcomeFrame.setLayout(new BorderLayout());
+ 
+    JButton search = new JButton("Search Books!");
+    search.addActionListener(new ActionListener(){
+    	public void actionPerformed(ActionEvent e){
+    		welcomeFrame.setVisible(false);
+    		userFrame.setVisible(true);
+    	}});
+    JPanel continuePanel = new JPanel(new FlowLayout());
+    continuePanel.add(search);
+    welcomeFrame.add(continuePanel, BorderLayout.SOUTH);
+    
+    JLabel logo = new JLabel(new ImageIcon("/cs/home/stu/fowlerne/gslogo.png"));
+    JPanel logoPanel = new JPanel(new BorderLayout());
+    logoPanel.setBackground(Color.WHITE);
+    logoPanel.add(logo, BorderLayout.CENTER);
+    
+    JLabel guten = new JLabel("Welcome to GutenSearch");
+    guten.setFont(new Font("Sans-Serif", Font.BOLD, 20));
+    JPanel gutenPanel = new JPanel(new FlowLayout());
+    gutenPanel.add(guten);
+    
+    logoPanel.add(gutenPanel, BorderLayout.NORTH);
+   
+    logoPanel.setBackground(Color.WHITE);
+
+    welcomeFrame.add(logoPanel, BorderLayout.CENTER);
+    welcomeFrame.setVisible(true);
+    
+	userFrame = new JFrame("GutenSearch");
     userFrame.setSize(800,800);
     userFrame.setLayout(new BorderLayout());
     userGUIdetails();
-    userFrame.setVisible(true);
-
   }
 
   /*
