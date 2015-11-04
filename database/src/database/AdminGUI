@@ -7,10 +7,13 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -120,6 +123,39 @@ public class AdminGUI
     	      {
     	        db.editBook(list.get(0).getText(), list.get(1).getText(), list.get(2).getText(), list
     	            .get(3).getText());
+    	        
+    	        
+    	        
+    	        File dir = new File(destination);
+    	        File[] directoryListing = dir.listFiles();
+    	        String text1 = "";
+    	        if (directoryListing != null) {
+    	          for (File child : directoryListing) {
+    	            // Do something with child
+    	        	  BufferedReader br;
+					try {
+						br = new BufferedReader(new FileReader(child));
+	    	        	  String line = null;  
+	    	        	  try {
+							while ((line = br.readLine()) != null)  
+							  {  
+									//parse line for author
+								//TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
+								text1 += line;
+							     
+							  }
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					} catch (FileNotFoundException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}  
+ 
+    	          }
+    	        }
+    	        
     	        
     	        	//check title&author attributes and then have a Jdialog box
     	      }
@@ -233,7 +269,10 @@ public class AdminGUI
     continuePanel.add(search);
 
     welcomeFrame.add(continuePanel, BorderLayout.SOUTH);
-    		//logo should be put in with the package
+    
+    
+    
+    //logo should be put in with the package
     JLabel logo = new JLabel(new ImageIcon("//home//student//Desktop//gslogo.png"));
     JPanel logoPanel = new JPanel(new BorderLayout());
     logoPanel.setBackground(Color.WHITE);
@@ -253,7 +292,6 @@ public class AdminGUI
 	   
     //SET DIRECTORY
     
-    //After choosing "Upload File, and set the directory for the "
     JButton setDirectoryButton = new JButton("Set Directory");
     adminButtonPanel.add(setDirectoryButton);
     setDirectoryButton.addActionListener(new ActionListener()
@@ -272,53 +310,6 @@ public class AdminGUI
             	JOptionPane.showMessageDialog(chooser, "Directory Selected", "Confirmation", JOptionPane.PLAIN_MESSAGE);
             }
     	}});
-//
-//    JPanel oldTitleBoxPanel = new JPanel(new FlowLayout());
-//    oldTitleBoxPanel.add(new JLabel("Old Title*: "));
-//    JTextField ottf = new JTextField(20);
-// 
-//    oldTitleBoxPanel.add(ottf);
-//
-//    JPanel oldAuthorBoxPanel = new JPanel(new FlowLayout());
-//    oldAuthorBoxPanel.add(new JLabel("Old Author*: "));
-//    JTextField oatf = new JTextField(20);
-//
-//    oldAuthorBoxPanel.add(oatf);
-//
-//    JPanel newTitleBoxPanel = new JPanel(new FlowLayout());
-//    newTitleBoxPanel.add(new JLabel("New Title: "));
-//    JTextField nttf = new JTextField(20);
-//
-//    newTitleBoxPanel.add(nttf);
-//
-//    JPanel newAuthorBoxPanel = new JPanel(new FlowLayout());
-//    newAuthorBoxPanel.add(new JLabel("New Author: "));
-//    JTextField natf = new JTextField(20);
-//    newAuthorBoxPanel.add(natf);
-//
-//    JButton editSource = new JButton("Edit Source");
-//    adminButtonPanel.add(editSource);
-//    editSource.addActionListener(new ActionListener()
-//    {
-//      public void actionPerformed(ActionEvent e)
-//      {
-//        db.editBook(list.get(0).getText(), list.get(1).getText(), list.get(2).getText(), list
-//            .get(3).getText());
-//      }
-//    });
-//
-//    list.add(ottf);
-//    list.add(nttf);
-//    list.add(oatf);
-//    list.add(natf);
-//
-//    adminFrame.add(adminButtonPanel);
-//    adminFrame.add(oldTitleBoxPanel);
-//    adminFrame.add(newTitleBoxPanel);
-//    adminFrame.add(oldAuthorBoxPanel);
-//    adminFrame.add(newAuthorBoxPanel);
 
-
-    
   }
 }
