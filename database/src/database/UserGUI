@@ -12,8 +12,10 @@ import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -29,6 +31,7 @@ public class UserGUI
 {
   Database db = new Database();
   JFrame userFrame;
+  String dir = "$HOME/Desktop";
 
 
 
@@ -47,14 +50,33 @@ public class UserGUI
     final JFrame welcomeFrame = new JFrame("GutenSearch");
     welcomeFrame.setSize(800,800);
     welcomeFrame.setLayout(new BorderLayout());
- 
+    
+    JButton settings = new JButton("Choose Directory");
+    settings.addActionListener(new ActionListener(){
+    	public void actionPerformed(ActionEvent e){
+    		JFrame chooser = new JFrame();
+    		JFileChooser fileChooser = new JFileChooser();
+    		fileChooser.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY);
+    		
+    		int retval = fileChooser.showOpenDialog(chooser);
+
+            if (retval == JFileChooser.APPROVE_OPTION)
+            {
+            	dir = fileChooser.getSelectedFile().toString();
+            	JOptionPane.showMessageDialog(chooser, "Directory Selected", "Confirmation", JOptionPane.PLAIN_MESSAGE);
+            	userGUIdetails();
+            }
+    	}});
+    
     JButton search = new JButton("Search Books!");
     search.addActionListener(new ActionListener(){
     	public void actionPerformed(ActionEvent e){
     		welcomeFrame.setVisible(false);
     		userFrame.setVisible(true);
     	}});
+    
     JPanel continuePanel = new JPanel(new FlowLayout());
+    continuePanel.add(settings);
     continuePanel.add(search);
     welcomeFrame.add(continuePanel, BorderLayout.SOUTH);
     
@@ -67,6 +89,7 @@ public class UserGUI
     guten.setFont(new Font("Sans-Serif", Font.BOLD, 20));
     JPanel gutenPanel = new JPanel(new FlowLayout());
     gutenPanel.add(guten);
+    gutenPanel.setBackground(Color.WHITE);
     
     logoPanel.add(gutenPanel, BorderLayout.NORTH);
    
@@ -78,7 +101,7 @@ public class UserGUI
 	userFrame = new JFrame("GutenSearch");
     userFrame.setSize(800,800);
     userFrame.setLayout(new BorderLayout());
-    userGUIdetails();
+    //userGUIdetails();
   }
 
   /*
@@ -88,7 +111,7 @@ public class UserGUI
   private void userGUIdetails()
   {
 	  
-	    File folder = new File("/cs/home/stu/fowlerne/Desktop/text");
+	    File folder = new File(dir);
 	    File[] listOfFiles = folder.listFiles();
 	 
 	    for (int i = 0; i < listOfFiles.length; i++) {
@@ -138,7 +161,17 @@ public class UserGUI
 
     searchText.addActionListener(new ActionListener(){
       public void actionPerformed(ActionEvent e){
-        resultText.setText(db.search(searchText.getText()));
+    	  String result = db.search(searchText.getText());
+    	  
+    	  if(result.equals("QUERY TERM NOT FOUND"))
+    	  {
+    		  resultText.setText("");
+    		  JOptionPane.showMessageDialog(userFrame, result, "Error", JOptionPane.ERROR_MESSAGE);
+    	  }
+    	  else
+    	  {
+    		  resultText.setText(db.search(searchText.getText()));
+    	  }
       }});
 
     JButton clearSearch = new JButton("Clear Search");
