@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.text.BadLocationException;
@@ -35,8 +36,9 @@ public class UserGUI
 {
   Database db = new Database();
   JFrame userFrame;
-  String dir = "$HOME/Desktop";
-
+  String dir = "$HOME//Desktop";
+  
+  JTabbedPane tabPane = new JTabbedPane();
 
 
   public static void main(String[] args)
@@ -51,7 +53,8 @@ public class UserGUI
    */
   private void userGUI()
   {
-    final JFrame welcomeFrame = new JFrame("GutenSearch");
+    
+	final JFrame welcomeFrame = new JFrame("GutenSearch");
     welcomeFrame.setSize(800,800);
     welcomeFrame.setLayout(new BorderLayout());
     
@@ -115,7 +118,9 @@ public class UserGUI
   private void userGUIdetails()
   {
 	  
-	    File folder = new File(dir);
+//	  tabPane.addTab("Tab 1", resultPanel,
+//              "Does nothing");	  	
+	  File folder = new File(dir);
 	    File[] listOfFiles = folder.listFiles();
 	 
 	    for (int i = 0; i < listOfFiles.length; i++) {
@@ -139,30 +144,59 @@ public class UserGUI
 	        /* do somthing with content */
 	      }
 	    }
+	 
+	//panels for search section
     JPanel searchLabelPanel = new JPanel(new FlowLayout());
     JPanel searchInputPanel = new JPanel(new FlowLayout());
     JLabel searchLabel = new JLabel("Enter Search Terms");
     JPanel searchPanel = new JPanel(new BorderLayout());
-
+    
+    //text areas for search field and results
     final JTextField searchText = new JTextField(25);
     final JTextArea resultText = new JTextArea();
     resultText.setLineWrap(true);
     resultText.setEditable(false);
-
+    
+    //add details to panels
     searchLabelPanel.add(searchLabel);
     searchInputPanel.add(searchText);
     searchPanel.add(searchLabelPanel, BorderLayout.NORTH);
     searchPanel.add(searchInputPanel, BorderLayout.CENTER);
-
+    
+    //panels for result section
     JPanel resultLabelPanel = new JPanel(new FlowLayout());
     JLabel resultLabel = new JLabel("Results");
     JPanel resultPanel = new JPanel(new BorderLayout());
     JScrollPane scrollPane = new JScrollPane(resultText);
 
+    
+    //panels for search results
     resultLabelPanel.add(resultLabel);
     resultPanel.add(resultLabelPanel, BorderLayout.NORTH);
     resultPanel.add(scrollPane, BorderLayout.CENTER);
-
+    
+    JPanel resultPanel2 = new JPanel(new FlowLayout());
+    resultPanel2.add(resultLabelPanel, BorderLayout.NORTH);
+    resultPanel2.add(scrollPane, BorderLayout.CENTER);
+    
+    JPanel resultPanel3 = new JPanel(new FlowLayout());
+    resultPanel3.add(resultLabelPanel, BorderLayout.NORTH);
+    resultPanel3.add(scrollPane, BorderLayout.CENTER);
+    
+    JPanel resultPanel4 = new JPanel(new FlowLayout());
+    resultPanel4.add(resultLabelPanel, BorderLayout.NORTH);
+    resultPanel4.add(scrollPane, BorderLayout.CENTER);
+    
+    resultPanel.add(resultLabelPanel, BorderLayout.NORTH);
+    resultPanel.add(scrollPane, BorderLayout.CENTER);
+    
+    //add tabs
+    tabPane.addTab("Result 1", resultPanel);	
+    tabPane.addTab("Result 2", resultPanel2);
+    tabPane.addTab("Result 3", resultPanel3);
+    tabPane.addTab("Result 4", resultPanel4);
+    
+    //action listener for search button
     searchText.addActionListener(new ActionListener(){
       public void actionPerformed(ActionEvent e){
     	  String result = db.search(searchText.getText());
@@ -194,21 +228,24 @@ public class UserGUI
 
     	  }
       }});
-
+    
+    //button for clearing the search
     JButton clearSearch = new JButton("Clear Search");
     clearSearch.addActionListener(new ActionListener(){
       public void actionPerformed(ActionEvent e){
         searchText.setText("");
         resultText.setText("");
       }});
-
+    
+    //panel for the search button
     JPanel clearPanel = new JPanel(new FlowLayout());
     clearPanel.add(clearSearch);
     resultPanel.add(clearPanel, BorderLayout.SOUTH);
-
+    
+    //add components to main panel
     JPanel textBoxPanel = new JPanel(new BorderLayout());
     textBoxPanel.add(searchPanel, BorderLayout.NORTH);
-    textBoxPanel.add(resultPanel, BorderLayout.CENTER);
+    textBoxPanel.add(tabPane, BorderLayout.CENTER);
     userFrame.add(textBoxPanel, BorderLayout.CENTER);
 
   }
