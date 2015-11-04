@@ -20,6 +20,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
+import javax.swing.text.Highlighter.HighlightPainter;
 
 /*
  * UserGUI
@@ -171,6 +175,23 @@ public class UserGUI
     	  else
     	  {
     		  resultText.setText(db.search(searchText.getText()));
+    	      int index = resultText.getText().indexOf(searchText.getText());
+    	      int len = searchText.getText().length();
+    	      Highlighter highlighter = resultText.getHighlighter();
+    	      HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
+    	      while ( index >= 0 ) {
+    	         try
+    	         {
+    	             highlighter.addHighlight(index, index+len, painter);
+    	         }
+    	         catch ( BadLocationException e1 )
+    	         {
+    	             // TODO Auto-generated catch block
+    	             e1.printStackTrace();
+    	         }
+    	         index = resultText.getText().indexOf(searchText.getText(), index+len);
+    	        }
+
     	  }
       }});
 
