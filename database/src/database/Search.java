@@ -25,7 +25,17 @@ public class Search {
   public Search(String query)
   {
 
-
+    String query1 = query;
+    for(int i = 0; i < query1.length(); i++)
+    {
+      if(query1.charAt(i) == '?')
+      {
+          for(char j = 'a'; j<='z';j++)
+          {
+              query += "| " + query.substring(0, i) + j + " ";
+          }
+      }
+    }
     String[] firstWord1 = query.split("\\&| |\\|");
     for(String str : firstWord1)
     {
