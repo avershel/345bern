@@ -23,6 +23,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -38,6 +39,7 @@ public class AdminGUI
   ArrayList<JTextField> list = new ArrayList<JTextField>();
   Database db = new Database();
   JFrame adminFrame;
+  String destination = "$HOME//Destop";
 
   /*
    * main
@@ -150,7 +152,7 @@ public class AdminGUI
     	    adminFrame.setLayout(new GridLayout(6, 1));
     	    adminFrame.add(adminButtonPanel);
     	    adminFrame.setVisible(true);
-    	    
+    	    		//2nd tier frame, choose file
     	    JButton uploadFile = new JButton("Choose File");
     	    adminButtonPanel.add(uploadFile);
     	    uploadFile.addActionListener(new ActionListener()
@@ -165,15 +167,16 @@ public class AdminGUI
     	        {
 
     	          File selectedFile = jfc.getSelectedFile();
+    	    
     	          System.out.println("File: " + selectedFile);
     	          try
     	          {
     	        	  String str = selectedFile.toString();
     	        	  String[] holder = str.split("/");
-    	        	  System.out.println("name = " + holder[holder.length-1]);
+    	        	  System.out.println(destination + " " + holder[holder.length-1]);
     	        	  
     	        	 // selectedFile.renameTo(new File("C://cs//home//stu//fowlerne//Desktop//text//" + selectedFile.getName()));
-    	        	  File dest = new File("//home//student//Desktop//text//" + holder[holder.length-1]);
+    	        	  File dest = new File(destination + "/" + holder[holder.length-1]);
     	        	  dest.getParentFile().mkdirs();
     	        	  dest.createNewFile();
     	              //Writer output = new BufferedWriter(new FileWriter(dest));
@@ -230,7 +233,7 @@ public class AdminGUI
     continuePanel.add(search);
 
     welcomeFrame.add(continuePanel, BorderLayout.SOUTH);
-    
+    		//logo should be put in with the package
     JLabel logo = new JLabel(new ImageIcon("//home//student//Desktop//gslogo.png"));
     JPanel logoPanel = new JPanel(new BorderLayout());
     logoPanel.setBackground(Color.WHITE);
@@ -248,71 +251,27 @@ public class AdminGUI
     welcomeFrame.add(logoPanel, BorderLayout.CENTER);
     welcomeFrame.setVisible(true);
 	   
+    //SET DIRECTORY
     
-    //After choosing "Upload File"
+    //After choosing "Upload File, and set the directory for the "
     JButton setDirectoryButton = new JButton("Set Directory");
     adminButtonPanel.add(setDirectoryButton);
     setDirectoryButton.addActionListener(new ActionListener()
     {
-      public void actionPerformed(ActionEvent e)
-      {
-        JFrame theFile = new JFrame();
-        JFileChooser jfc = new JFileChooser();
-        int retval = jfc.showOpenDialog(theFile);
+    	public void actionPerformed(ActionEvent e){
+    		JFrame chooser = new JFrame();
+    		JFileChooser fileChooser = new JFileChooser();
+    		fileChooser.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY);
+    		
+    		int retval = fileChooser.showOpenDialog(chooser);
 
-        if (retval == JFileChooser.APPROVE_OPTION)
-        {
-
-          File selectedFile = jfc.getSelectedFile();
-          System.out.println("File: " + selectedFile);
-          try
-          {
-        	  String str = selectedFile.toString();
-        	  String[] holder = str.split("/");
-        	  System.out.println("name = " + holder[holder.length-1]);
-        	  
-        	 // selectedFile.renameTo(new File("C://cs//home//stu//fowlerne//Desktop//text//" + selectedFile.getName()));
-        	  File dest = new File("//home//student//Desktop//text//" + holder[holder.length-1]);
-        	  dest.getParentFile().mkdirs();
-        	  dest.createNewFile();
-              //Writer output = new BufferedWriter(new FileWriter(dest));
-           // db.addTxtFiles(selectedFile);
-        	  InputStream input = null;
-        	  
-        	  	    OutputStream output = null;
-        	  
-        	  	    try {
-        	  
-        	  	        input = new FileInputStream(selectedFile);
-        	  
-        	  	        output = new FileOutputStream(dest);
-        	  
-        	  	        byte[] buf = new byte[1024];
-        	  
-        	  	        int bytesRead;
-        	  
-        	  	        while ((bytesRead = input.read(buf)) > 0) {
-        	  
-        	  	            output.write(buf, 0, bytesRead);
-        	  
-        	  	        }
-        	  
-        	  	    } finally {
-        	  
-        	  	        input.close();
-        	  
-        	  	        output.close();
-        	  
-        	  	    }
-          }
-          catch (IOException e1)
-          {
-            e1.printStackTrace();
-          }
-        }
-        ;
-      }
-    });
+            if (retval == JFileChooser.APPROVE_OPTION)
+            {
+            	destination = fileChooser.getSelectedFile().toString();
+            	System.out.println(destination);
+            	JOptionPane.showMessageDialog(chooser, "Directory Selected", "Confirmation", JOptionPane.PLAIN_MESSAGE);
+            }
+    	}});
 //
 //    JPanel oldTitleBoxPanel = new JPanel(new FlowLayout());
 //    oldTitleBoxPanel.add(new JLabel("Old Title*: "));
