@@ -376,7 +376,8 @@ public class AdminGUI
 	        {
 
 	          File selectedFile = jfc.getSelectedFile();
-	    
+          	JOptionPane.showMessageDialog(jfc, "File Uploaded", "Confirmation", JOptionPane.PLAIN_MESSAGE);
+
 	          System.out.println("File: " + selectedFile);
 	          try
 	          {
@@ -445,17 +446,24 @@ public class AdminGUI
             }
     	}});
     
+    final JButton help = new JButton("Help");
+    help.addActionListener(new ActionListener(){
+    	public void actionPerformed(ActionEvent e){
+    		JOptionPane.showMessageDialog(help, "Choose directory before beginning.\n  The directory chosen will be the place where the text files are held.\n  Afterwards, you may upload a selected file to that folder, as well as edit the files in the folder.", "Help", JOptionPane.PLAIN_MESSAGE);
+
+    	}});
+    	
     JPanel continuePanel = new JPanel(new FlowLayout());
     continuePanel.add(settings);
-
     continuePanel.add(upload);
     continuePanel.add(edit);
     continuePanel.add(search);
+    continuePanel.add(help);
 
     welcomeFrame.add(continuePanel, BorderLayout.SOUTH);
     
     //logo should be put in with the package
-    JLabel logo = new JLabel(new ImageIcon("//home//student//Desktop//gslogo.png"));
+    JLabel logo = new JLabel(new ImageIcon("/Users/Austin/Desktop/gslogo.png"));
     JPanel logoPanel = new JPanel(new BorderLayout());
     logoPanel.setBackground(Color.WHITE);
     logoPanel.add(logo, BorderLayout.CENTER);
@@ -466,30 +474,9 @@ public class AdminGUI
     gutenPanel.add(guten);
     
     logoPanel.add(gutenPanel, BorderLayout.NORTH);
-   
 
     welcomeFrame.add(logoPanel, BorderLayout.CENTER);
     welcomeFrame.setVisible(true);
 	   
-    //SET DIRECTORY
-    
-//    JButton setDirectoryButton = new JButton("Set Directory");
-//    //adminButtonPanel.add(setDirectoryButton);
-//    setDirectoryButton.addActionListener(new ActionListener()
-//    {
-//    	public void actionPerformed(ActionEvent e){
-//    		JFrame chooser = new JFrame();
-//    		JFileChooser fileChooser = new JFileChooser();
-//    		fileChooser.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY);
-//    		
-//    		int retval = fileChooser.showOpenDialog(chooser);
-//
-//            if (retval == JFileChooser.APPROVE_OPTION)
-//            {
-//            	destination = fileChooser.getSelectedFile().toString();
-//            	System.out.println(destination);
-//            	JOptionPane.showMessageDialog(chooser, "Directory Selected", "Confirmation", JOptionPane.PLAIN_MESSAGE);
-//            }
-//    	}});
   }
 }
