@@ -60,6 +60,7 @@ public class AdminGUI
     JButton edit = new JButton("Edit a Text");
     edit.addActionListener(new ActionListener()
     {
+
     	public void actionPerformed(ActionEvent e){
     		welcomeFrame.setVisible(false);
     		adminFrame.setVisible(true);   
@@ -67,7 +68,7 @@ public class AdminGUI
 
 
     	    
-    	    JPanel adminButtonPanel = new JPanel();
+    	    final JPanel adminButtonPanel = new JPanel();
     	 
     	    JPanel oldTitleBoxPanel = new JPanel(new FlowLayout());
     	    oldTitleBoxPanel.add(new JLabel("Old Title*: "));
@@ -94,17 +95,19 @@ public class AdminGUI
 
     	    JButton editSource = new JButton("Apply Edits");
     	    adminButtonPanel.add(editSource);
-    	    JButton back = new JButton("Back");
-    	    adminButtonPanel.add(back);
-
-    	    back.addActionListener(new ActionListener()
-    	    {
-    	      public void actionPerformed(ActionEvent e)
-    	      {
-    	    	  adminFrame.setVisible(false);
-    	    	  welcomeFrame.setVisible(true);
-    	      }
-    	    });
+//    	    JButton back = new JButton("Back");
+//    	    adminButtonPanel.add(back);
+//
+//    	    back.addActionListener(new ActionListener()
+//    	    {
+//    	      public void actionPerformed(ActionEvent e)
+//    	      {
+//    	    	  adminFrame.setVisible(false);
+//    	    	  adminButtonPanel.removeAll();
+//
+//    	    	  welcomeFrame.setVisible(true);
+//    	      }
+//    	    });
     	    
     	    
     	    editSource.addActionListener(new ActionListener()
@@ -174,7 +177,6 @@ public class AdminGUI
     	}});
     
     
-    final JPanel adminButtonPanel = new JPanel();
    
 
     //LINK TO UserGUI SEARCH CODE
@@ -183,6 +185,8 @@ public class AdminGUI
     search.addActionListener(new ActionListener()
     {
     	public void actionPerformed(ActionEvent e){
+    	     JPanel adminButtonPanel = new JPanel();
+
     		welcomeFrame.setVisible(false);
     		adminFrame.setTitle("Admin: Search Books");
     		adminFrame.setVisible(true);
@@ -331,100 +335,69 @@ public class AdminGUI
     JButton upload = new JButton("Upload a Text");
     upload.addActionListener(new ActionListener()
     {
-    	public void actionPerformed(ActionEvent e)
-    	{
-    		welcomeFrame.setVisible(false);
-    		adminFrame.setTitle("Admin: Upload a Source");
-  
-    	    adminFrame.add(adminButtonPanel);
-    	    adminFrame.setSize(420, 420);
 
-    	    adminFrame.setVisible(true);
-    	    		//2nd tier frame, choose file
-    	    JButton uploadFile = new JButton("Choose File");
-    	    JButton back = new JButton("Back");
-    	    adminButtonPanel.add(back);
 
-    	    back.addActionListener(new ActionListener()
-    	    {
-    	      public void actionPerformed(ActionEvent e)
-    	      {
-    	    	  adminFrame.setVisible(false);
-    	    	  
-    	    	  welcomeFrame.setVisible(true);
-    	    	   // adminButtonPanel.add(search);
-
-    	      }
-    	    });
-    	    adminButtonPanel.add(uploadFile);
-    	    adminButtonPanel.add(search);
-    	    uploadFile.addActionListener(new ActionListener()
-    	    {
-    	      public void actionPerformed(ActionEvent e)
-    	      {
-    	        JFrame theFile = new JFrame();
-    	        JFileChooser jfc = new JFileChooser();
-    	        int retval = jfc.showOpenDialog(theFile);
-
-    	        if (retval == JFileChooser.APPROVE_OPTION)
-    	        {
-
-    	          File selectedFile = jfc.getSelectedFile();
-    	    
-    	          System.out.println("File: " + selectedFile);
-    	          try
-    	          {
-    	        	  String str = selectedFile.toString();
-    	        	  String[] holder = str.split("/");
-    	        	  System.out.println(destination + " " + holder[holder.length-1]);
-    	        	  
-    	        	 // selectedFile.renameTo(new File("C://cs//home//stu//fowlerne//Desktop//text//" + selectedFile.getName()));
-    	        	  File dest = new File(destination + "/" + holder[holder.length-1]);
-    	        	  dest.getParentFile().mkdirs();
-    	        	  dest.createNewFile();
-    	              //Writer output = new BufferedWriter(new FileWriter(dest));
-    	           // db.addTxtFiles(selectedFile);
-    	        	  InputStream input = null;
-    	        	  
-    	        	  	    OutputStream output = null;
-    	        	  
-    	        	  	    try {
-    	        	  
-    	        	  	        input = new FileInputStream(selectedFile);
-    	        	  
-    	        	  	        output = new FileOutputStream(dest);
-    	        	  
-    	        	  	        byte[] buf = new byte[1024];
-    	        	  
-    	        	  	        int bytesRead;
-    	        	  
-    	        	  	        while ((bytesRead = input.read(buf)) > 0) {
-    	        	  
-    	        	  	            output.write(buf, 0, bytesRead);
-    	        	  
-    	        	  	        }
-    	        	  
-    	        	  	    } finally {
-    	        	  
-    	        	  	        input.close();
-    	        	  
-    	        	  	        output.close();
-    	        	  
-    	        	  	    }
-    	          }
-    	          catch (IOException e1)
-    	          {
-    	            e1.printStackTrace();
-    	          }
-    	        }
-    	        ;
-    	       
-    	      }
-    	     
-    	    });
-
-    	}
     	
+	      public void actionPerformed(ActionEvent e)
+	      {
+	        JFrame theFile = new JFrame();
+	        JFileChooser jfc = new JFileChooser();
+	        int retval = jfc.showOpenDialog(theFile);
+
+	        if (retval == JFileChooser.APPROVE_OPTION)
+	        {
+
+	          File selectedFile = jfc.getSelectedFile();
+	    
+	          System.out.println("File: " + selectedFile);
+	          try
+	          {
+	        	  String str = selectedFile.toString();
+	        	  String[] holder = str.split("/");
+	        	  System.out.println(destination + " " + holder[holder.length-1]);
+	        	  
+	        	 // selectedFile.renameTo(new File("C://cs//home//stu//fowlerne//Desktop//text//" + selectedFile.getName()));
+	        	  File dest = new File(destination + "/" + holder[holder.length-1]);
+	        	  dest.getParentFile().mkdirs();
+	        	  dest.createNewFile();
+	              //Writer output = new BufferedWriter(new FileWriter(dest));
+	           // db.addTxtFiles(selectedFile);
+	        	  InputStream input = null;
+	        	  
+	        	  	    OutputStream output = null;
+	        	  
+	        	  	    try {
+	        	  
+	        	  	        input = new FileInputStream(selectedFile);
+	        	  
+	        	  	        output = new FileOutputStream(dest);
+	        	  
+	        	  	        byte[] buf = new byte[1024];
+	        	  
+	        	  	        int bytesRead;
+	        	  
+	        	  	        while ((bytesRead = input.read(buf)) > 0) {
+	        	  
+	        	  	            output.write(buf, 0, bytesRead);
+	        	  
+	        	  	        }
+	        	  
+	        	  	    } finally {
+	        	  
+	        	  	        input.close();
+	        	  
+	        	  	        output.close();
+	        	  
+	        	  	    }
+	          }
+	          catch (IOException e1)
+	          {
+	            e1.printStackTrace();
+	          }
+	        }
+	        ;
+	       
+	      }
     	
     	
     	
