@@ -237,7 +237,7 @@ public class AdminGUI
   	    
   	    //panels for result section
   	    JPanel resultLabelPanel = new JPanel(new FlowLayout());
-  	    JLabel resultLabel = new JLabel("Results");
+  	    final JLabel resultLabel = new JLabel("Results");
   	    JPanel resultPanel = new JPanel(new BorderLayout());
   	    JScrollPane scrollPane = new JScrollPane(resultText);
 
@@ -271,8 +271,12 @@ public class AdminGUI
   	    //action listener for search button
   	    searchText.addActionListener(new ActionListener(){
   	      public void actionPerformed(ActionEvent e){
+  	    	  long startTime = System.currentTimeMillis();
+  	    	  long elapsedTime = 0L;
   	    	  String result = db.search(searchText.getText());
-  	    	  
+  	    	elapsedTime = (new Date()).getTime() - startTime;
+  	    	double seconds = elapsedTime/ 1000.0;
+  	    	resultLabel.setText("Results:(Searched " + Database.textcount + " Texts in "+ seconds + " Seconds)");
   	    	  if(result.equals("QUERY TERM NOT FOUND"))
   	    	  {
   	    		  resultText.setText("");
