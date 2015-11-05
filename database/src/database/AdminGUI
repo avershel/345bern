@@ -53,15 +53,140 @@ public class AdminGUI
     
     
     
+    
+    
+    
+    //EDIT SOURCES, should be working as of now
+    JButton edit = new JButton("Edit a Text");
+    edit.addActionListener(new ActionListener()
+    {
+    	public void actionPerformed(ActionEvent e){
+    		welcomeFrame.setVisible(false);
+    		adminFrame.setVisible(true);   
+    		adminFrame.setTitle(("Admin: Edit Sources"));
+
+
+    	    
+    	    JPanel adminButtonPanel = new JPanel();
+    	 
+    	    JPanel oldTitleBoxPanel = new JPanel(new FlowLayout());
+    	    oldTitleBoxPanel.add(new JLabel("Old Title*: "));
+    	    JTextField ottf = new JTextField(20);
+    	 
+    	    oldTitleBoxPanel.add(ottf);
+
+    	    JPanel oldAuthorBoxPanel = new JPanel(new FlowLayout());
+    	    oldAuthorBoxPanel.add(new JLabel("Old Author*: "));
+    	    JTextField oatf = new JTextField(20);
+
+    	    oldAuthorBoxPanel.add(oatf);
+
+    	    JPanel newTitleBoxPanel = new JPanel(new FlowLayout());
+    	    newTitleBoxPanel.add(new JLabel("New Title: "));
+    	    JTextField nttf = new JTextField(20);
+
+    	    newTitleBoxPanel.add(nttf);
+
+    	    JPanel newAuthorBoxPanel = new JPanel(new FlowLayout());
+    	    newAuthorBoxPanel.add(new JLabel("New Author: "));
+    	    JTextField natf = new JTextField(20);
+    	    newAuthorBoxPanel.add(natf);
+
+    	    JButton editSource = new JButton("Apply Edits");
+    	    adminButtonPanel.add(editSource);
+    	    JButton back = new JButton("Back");
+    	    adminButtonPanel.add(back);
+
+    	    back.addActionListener(new ActionListener()
+    	    {
+    	      public void actionPerformed(ActionEvent e)
+    	      {
+    	    	  adminFrame.setVisible(false);
+    	    	  welcomeFrame.setVisible(true);
+    	      }
+    	    });
+    	    
+    	    
+    	    editSource.addActionListener(new ActionListener()
+    	    {
+    	      public void actionPerformed(ActionEvent e)
+    	      {
+    	           
+    	        File dir = new File(destination);
+    	        File[] directoryListing = dir.listFiles();
+    	        String text1 = "";
+    	        if (directoryListing != null) {
+    	          for (File child : directoryListing) {
+    	            // Do something with child
+    	        	  BufferedReader br;
+					try {
+						br = new BufferedReader(new FileReader(child));
+	    	        	  String line = null;  
+	    	        	  try {
+	    	        		  System.out.println("TRYING");
+							while ((line = br.readLine()) != null)  
+							  {  
+									//parse line for author
+								//TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
+								text1 += line + "\n";
+								//System.out.println("text1 = " + text1);
+								
+							     
+							  }
+							String []split = text1.split("\n");
+							System.out.println("size = " + split[0]);
+							for(String lh : split)
+							{
+								System.out.println(lh);
+								if(lh.indexOf("Title:") > 0)
+								{
+									System.out.println("lh = " + lh);
+								}
+							}
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					} catch (FileNotFoundException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}  
+ 
+    	          }
+    	        }
+    	        
+    	        
+    	        	//check title&author attributes and then have a Jdialog box
+    	      }
+    	    });
+
+    	    list.add(ottf);
+    	    list.add(nttf);
+    	    list.add(oatf);
+    	    list.add(natf);
+
+    	    adminFrame.add(oldTitleBoxPanel);
+    	    adminFrame.add(newTitleBoxPanel);
+    	    adminFrame.add(oldAuthorBoxPanel);
+    	    adminFrame.add(newAuthorBoxPanel);
+    	    adminFrame.add(adminButtonPanel);
+
+    	}});
+    
+    
+    final JPanel adminButtonPanel = new JPanel();
+   
+
     //LINK TO UserGUI SEARCH CODE
     final JButton search = new JButton("Go to GutenSearch");
+    
     search.addActionListener(new ActionListener()
     {
     	public void actionPerformed(ActionEvent e){
     		welcomeFrame.setVisible(false);
     		adminFrame.setTitle("Admin: Search Books");
     		adminFrame.setVisible(true);
-    	    adminFrame.setLayout(new BorderLayout());
+    		adminFrame.setLayout(new BorderLayout());
   		  
     		//pas
     		
@@ -115,7 +240,6 @@ public class AdminGUI
   	    JLabel resultLabel = new JLabel("Results");
   	    JPanel resultPanel = new JPanel(new BorderLayout());
   	    JScrollPane scrollPane = new JScrollPane(resultText);
-  	    
 
   	    
   	    //panels for search results
@@ -138,7 +262,7 @@ public class AdminGUI
   	    resultPanel.add(resultLabelPanel, BorderLayout.NORTH);
   	    resultPanel.add(scrollPane, BorderLayout.CENTER);
   	    
-  	   
+  	    //add tabs
   	    tabPane.addTab("Result 1", resultPanel);	
   	    tabPane.addTab("Result 2", resultPanel2);
   	    tabPane.addTab("Result 3", resultPanel3);
@@ -199,117 +323,8 @@ public class AdminGUI
     		
     											  }
     	});
-    
-    
-    
-    //EDIT SOURCES, should be working as of now
-    JButton edit = new JButton("Edit a Text");
-    edit.addActionListener(new ActionListener()
-    {
-    	public void actionPerformed(ActionEvent e){
-    		welcomeFrame.setVisible(false);
-    		adminFrame.setVisible(true);   
-    		adminFrame.setTitle(("Admin: Edit Sources"));
-
-
-    	    
-    	    JPanel adminButtonPanel = new JPanel();
-    	 
-    	    JPanel oldTitleBoxPanel = new JPanel(new FlowLayout());
-    	    oldTitleBoxPanel.add(new JLabel("Old Title*: "));
-    	    JTextField ottf = new JTextField(20);
-    	 
-    	    oldTitleBoxPanel.add(ottf);
-
-    	    JPanel oldAuthorBoxPanel = new JPanel(new FlowLayout());
-    	    oldAuthorBoxPanel.add(new JLabel("Old Author*: "));
-    	    JTextField oatf = new JTextField(20);
-
-    	    oldAuthorBoxPanel.add(oatf);
-
-    	    JPanel newTitleBoxPanel = new JPanel(new FlowLayout());
-    	    newTitleBoxPanel.add(new JLabel("New Title: "));
-    	    JTextField nttf = new JTextField(20);
-
-    	    newTitleBoxPanel.add(nttf);
-
-    	    JPanel newAuthorBoxPanel = new JPanel(new FlowLayout());
-    	    newAuthorBoxPanel.add(new JLabel("New Author: "));
-    	    JTextField natf = new JTextField(20);
-    	    newAuthorBoxPanel.add(natf);
-
-    	    JButton editSource = new JButton("Apply Edits");
-    	    adminButtonPanel.add(editSource);
-    	    editSource.addActionListener(new ActionListener()
-    	    {
-    	      public void actionPerformed(ActionEvent e)
-    	      {
-    	           
-    	        File dir = new File(destination);
-    	        File[] directoryListing = dir.listFiles();
-    	        String text1 = "";
-    	        if (directoryListing != null) {
-    	          for (File child : directoryListing) {
-    	            // Do something with child
-    	        	  BufferedReader br;
-					try {
-						br = new BufferedReader(new FileReader(child));
-	    	        	  String line = null;  
-	    	        	  try {
-							while ((line = br.readLine()) != null)  
-							  {  
-									//parse line for author
-								//TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
-								text1 += line;
-							     
-							  }
-							String []split = text1.split("\n\n");
-							for(String lh : split)
-							{
-								if(lh.indexOf("Author:") > 0)
-								{
-									System.out.println(lh);
-								}
-							}
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-					} catch (FileNotFoundException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					}  
- 
-    	          }
-    	        }
-    	        
-    	        
-    	        	//check title&author attributes and then have a Jdialog box
-    	      }
-    	    });
-
-    	    list.add(ottf);
-    	    list.add(nttf);
-    	    list.add(oatf);
-    	    list.add(natf);
-
-    	    adminFrame.add(oldTitleBoxPanel);
-    	    adminFrame.add(newTitleBoxPanel);
-    	    adminFrame.add(oldAuthorBoxPanel);
-    	    adminFrame.add(newAuthorBoxPanel);
-    	    adminFrame.add(adminButtonPanel);
-
-    	}});
-    
-    
-    final JPanel adminButtonPanel = new JPanel();
-    final JButton back = new JButton("Back");
-    adminButtonPanel.add(back);   
     //Upload File
     JButton upload = new JButton("Upload a Text");
-    final JButton uploadFile = new JButton("Choose File");
-    adminButtonPanel.add(uploadFile);
-
     upload.addActionListener(new ActionListener()
     {
     	public void actionPerformed(ActionEvent e)
@@ -322,19 +337,23 @@ public class AdminGUI
 
     	    adminFrame.setVisible(true);
     	    		//2nd tier frame, choose file
-    	  /////back
+    	    JButton uploadFile = new JButton("Choose File");
+    	    JButton back = new JButton("Back");
+    	    adminButtonPanel.add(back);
 
     	    back.addActionListener(new ActionListener()
     	    {
-    	    		public void actionPerformed(ActionEvent e)
-    	    		{
-    	    			adminFrame.setVisible(false);
-    	    			welcomeFrame.setVisible(true);
-    	    		}
-    	});
-    	   // adminButtonPanel.add(search);
-    	    
-    	    
+    	      public void actionPerformed(ActionEvent e)
+    	      {
+    	    	  adminFrame.setVisible(false);
+    	    	  
+    	    	  welcomeFrame.setVisible(true);
+    	    	   // adminButtonPanel.add(search);
+
+    	      }
+    	    });
+    	    adminButtonPanel.add(uploadFile);
+    	    adminButtonPanel.add(search);
     	    uploadFile.addActionListener(new ActionListener()
     	    {
     	      public void actionPerformed(ActionEvent e)
