@@ -242,8 +242,6 @@ public class AdminGUI
     	    {
     	      public void actionPerformed(ActionEvent e)
     	      {
-    	        db.editBook(list.get(0).getText(), list.get(1).getText(), list.get(2).getText(), list
-    	            .get(3).getText());
     	           
     	        File dir = new File(destination);
     	        File[] directoryListing = dir.listFiles();
@@ -263,6 +261,14 @@ public class AdminGUI
 								text1 += line;
 							     
 							  }
+							String []split = text1.split("\n\n");
+							for(String lh : split)
+							{
+								if(lh.indexOf("Author:") > 0)
+								{
+									System.out.println(lh);
+								}
+							}
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
@@ -306,6 +312,8 @@ public class AdminGUI
     		adminFrame.setTitle("Admin: Upload a Source");
   
     	    adminFrame.add(adminButtonPanel);
+    	    adminFrame.setSize(420, 420);
+
     	    adminFrame.setVisible(true);
     	    		//2nd tier frame, choose file
     	    JButton uploadFile = new JButton("Choose File");
@@ -383,7 +391,30 @@ public class AdminGUI
     	
     	
     });
+    
+    
+    JButton settings = new JButton("Choose Directory");
+    settings.addActionListener(new ActionListener(){
+    	public void actionPerformed(ActionEvent e){
+    		JFrame chooser = new JFrame();
+    		JFileChooser fileChooser = new JFileChooser();
+    		fileChooser.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY);
+    		
+    		int retval = fileChooser.showOpenDialog(chooser);
+
+            if (retval == JFileChooser.APPROVE_OPTION)
+            {
+            	destination = fileChooser.getSelectedFile().toString();
+            	JOptionPane.showMessageDialog(chooser, "Directory Selected", "Confirmation", JOptionPane.PLAIN_MESSAGE);
+            	//userGUIdetails();
+            }
+    	}});
+    
+    
+    
     JPanel continuePanel = new JPanel(new FlowLayout());
+    continuePanel.add(settings);
+
     continuePanel.add(upload);
     continuePanel.add(edit);
     continuePanel.add(search);
@@ -411,25 +442,30 @@ public class AdminGUI
 	   
     //SET DIRECTORY
     
-    JButton setDirectoryButton = new JButton("Set Directory");
-    adminButtonPanel.add(setDirectoryButton);
-    setDirectoryButton.addActionListener(new ActionListener()
-    {
-    	public void actionPerformed(ActionEvent e){
-    		JFrame chooser = new JFrame();
-    		JFileChooser fileChooser = new JFileChooser();
-    		fileChooser.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY);
-    		
-    		int retval = fileChooser.showOpenDialog(chooser);
+//    JButton setDirectoryButton = new JButton("Set Directory");
+//    //adminButtonPanel.add(setDirectoryButton);
+//    setDirectoryButton.addActionListener(new ActionListener()
+//    {
+//    	public void actionPerformed(ActionEvent e){
+//    		JFrame chooser = new JFrame();
+//    		JFileChooser fileChooser = new JFileChooser();
+//    		fileChooser.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY);
+//    		
+//    		int retval = fileChooser.showOpenDialog(chooser);
+//
+//            if (retval == JFileChooser.APPROVE_OPTION)
+//            {
+//            	destination = fileChooser.getSelectedFile().toString();
+//            	System.out.println(destination);
+//            	JOptionPane.showMessageDialog(chooser, "Directory Selected", "Confirmation", JOptionPane.PLAIN_MESSAGE);
+//            }
+//    	}});
 
-            if (retval == JFileChooser.APPROVE_OPTION)
-            {
-            	destination = fileChooser.getSelectedFile().toString();
-            	System.out.println(destination);
-            	JOptionPane.showMessageDialog(chooser, "Directory Selected", "Confirmation", JOptionPane.PLAIN_MESSAGE);
-            }
-    	}});
+    
+    
 
+    
+    
       
   }
   
