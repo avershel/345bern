@@ -61,6 +61,7 @@ public class AdminGUI
     		welcomeFrame.setVisible(false);
     		adminFrame.setTitle("Admin: Search Books");
     		adminFrame.setVisible(true);
+    	    adminFrame.setLayout(new BorderLayout());
   		  
     		//pas
     		
@@ -114,6 +115,7 @@ public class AdminGUI
   	    JLabel resultLabel = new JLabel("Results");
   	    JPanel resultPanel = new JPanel(new BorderLayout());
   	    JScrollPane scrollPane = new JScrollPane(resultText);
+  	    
 
   	    
   	    //panels for search results
@@ -136,7 +138,7 @@ public class AdminGUI
   	    resultPanel.add(resultLabelPanel, BorderLayout.NORTH);
   	    resultPanel.add(scrollPane, BorderLayout.CENTER);
   	    
-  	    //add tabs
+  	   
   	    tabPane.addTab("Result 1", resultPanel);	
   	    tabPane.addTab("Result 2", resultPanel2);
   	    tabPane.addTab("Result 3", resultPanel3);
@@ -301,9 +303,13 @@ public class AdminGUI
     
     
     final JPanel adminButtonPanel = new JPanel();
-   
+    final JButton back = new JButton("Back");
+    adminButtonPanel.add(back);   
     //Upload File
     JButton upload = new JButton("Upload a Text");
+    final JButton uploadFile = new JButton("Choose File");
+    adminButtonPanel.add(uploadFile);
+
     upload.addActionListener(new ActionListener()
     {
     	public void actionPerformed(ActionEvent e)
@@ -316,9 +322,19 @@ public class AdminGUI
 
     	    adminFrame.setVisible(true);
     	    		//2nd tier frame, choose file
-    	    JButton uploadFile = new JButton("Choose File");
-    	    adminButtonPanel.add(uploadFile);
-    	    adminButtonPanel.add(search);
+    	  /////back
+
+    	    back.addActionListener(new ActionListener()
+    	    {
+    	    		public void actionPerformed(ActionEvent e)
+    	    		{
+    	    			adminFrame.setVisible(false);
+    	    			welcomeFrame.setVisible(true);
+    	    		}
+    	});
+    	   // adminButtonPanel.add(search);
+    	    
+    	    
     	    uploadFile.addActionListener(new ActionListener()
     	    {
     	      public void actionPerformed(ActionEvent e)
