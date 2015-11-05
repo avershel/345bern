@@ -68,13 +68,13 @@ public class AdminGUI
     	    final JPanel adminButtonPanel = new JPanel();
     	 
     	    JPanel oldTitleBoxPanel = new JPanel(new FlowLayout());
-    	    oldTitleBoxPanel.add(new JLabel("Old Title*: "));
+    	    oldTitleBoxPanel.add(new JLabel("Old Title: "));
     	    final JTextField ottf = new JTextField(20);
     	 
     	    oldTitleBoxPanel.add(ottf);
 
     	    JPanel oldAuthorBoxPanel = new JPanel(new FlowLayout());
-    	    oldAuthorBoxPanel.add(new JLabel("Old Author*: "));
+    	    oldAuthorBoxPanel.add(new JLabel("Old Author: "));
     	    final JTextField oatf = new JTextField(20);
 
     	    oldAuthorBoxPanel.add(oatf);
@@ -139,10 +139,14 @@ public class AdminGUI
 								if(split[i].indexOf("Title:") != -1)
 								{
 									String s = split[i].substring(7, split[i].length());
-									s.replace("\n", "");
+									s = s.replace("\n", "");
+									s = s.replace(" ", "");
+									String t = ottf.getText();
+									t = t.replace(" ", "");
 									System.out.println("TITLE = " + s);
-									if(s.equalsIgnoreCase(ottf.getText()))
+									if(s.equalsIgnoreCase(t))
 									{
+										System.out.println("changing title");
 										split[i] = "Title: " + nttf.getText();										
 									}
 
@@ -150,9 +154,12 @@ public class AdminGUI
 								if(split[i].indexOf("Author:") != -1)
 								{
 									String s = split[i].substring(8, split[i].length());
-									s.replace("\n", "");
+									s = s.replace("\n", "");
+									s = s.replace(" ", "");
+									String a = oatf.getText();
+									a = a.replace(" ", "");
 									System.out.println("author = " + s);
-									if(s.equalsIgnoreCase(oatf.getText()))
+									if(s.equalsIgnoreCase(a))
 									{
 									split[i] = "Author: " + natf.getText();
 									break;
