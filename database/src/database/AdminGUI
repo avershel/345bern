@@ -87,13 +87,13 @@ public class AdminGUI
 
     	    JPanel newTitleBoxPanel = new JPanel(new FlowLayout());
     	    newTitleBoxPanel.add(new JLabel("New Title: "));
-    	    JTextField nttf = new JTextField(20);
+    	    final JTextField nttf = new JTextField(20);
 
     	    newTitleBoxPanel.add(nttf);
 
     	    JPanel newAuthorBoxPanel = new JPanel(new FlowLayout());
     	    newAuthorBoxPanel.add(new JLabel("New Author: "));
-    	    JTextField natf = new JTextField(20);
+    	    final JTextField natf = new JTextField(20);
     	    newAuthorBoxPanel.add(natf);
 
     	    JButton editSource = new JButton("Apply Edits");
@@ -129,26 +129,53 @@ public class AdminGUI
 						br = new BufferedReader(new FileReader(child));
 	    	        	  String line = null;  
 	    	        	  try {
-	    	        		  System.out.println("TRYING");
 							while ((line = br.readLine()) != null)  
 							  {  
 									//parse line for author
 								//TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
 								text1 += line + "\n";
-								//System.out.println("text1 = " + text1);
 								
 							     
 							  }
-							String []split = text1.split("\n");
-							System.out.println("size = " + split[0]);
-							for(String lh : split)
+							//System.out.println(ottf.getText());
+							String []split = text1.split("\n\n");
+							System.out.println("SPLIT SIZE = " + split.length + "\n[o] = " + split[0]);
+							for(int i = 0; i < split.length; i++)
 							{
-								System.out.println(lh);
-								if(lh.indexOf("Title:") > 0)
+							//	System.out.println(lh);
+								if(split[i].indexOf("Title:") != -1)
 								{
-									System.out.println("lh = " + lh);
+									split[i] = "Title: " + nttf.getText();
+//									String [] tit = split[i].split("\n");
+//									String holder = "";
+//									for(int ii = 0; ii < tit.length; ii++)
+//									{
+//										holder += tit[ii].substring(tit[ii].indexOf(':'), tit[ii].length());
+//										holder.replace("\n", "");
+//									}
+//									split[i] = "Title: " + nttf.getText();
+//									System.out.println("lh = " + split[i]);
+								}
+								if(split[i].indexOf("Author:") != -1)
+								{
+									split[i] = "Author: " + natf.getText();
+//									String [] tit = split[i].split("\n");
+//									String holder = "";
+//									for(int ii = 0; ii < tit.length; ii++)
+//									{
+//										holder += tit[ii].substring(tit[ii].indexOf(':'), tit[ii].length());
+//										holder.replace("\n", "");
+//									}
+//									split[i] = "Title: " + nttf.getText();
+//									System.out.println("lh = " + split[i]);
 								}
 							}
+							FileWriter fw = new FileWriter(child);
+							for(String l : split)
+							{
+								fw.write(l + "\n\n");
+							}
+							fw.close();
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
