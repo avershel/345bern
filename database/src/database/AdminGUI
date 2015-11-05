@@ -50,12 +50,6 @@ public class AdminGUI
     adminFrame.setLayout(new GridLayout(6, 1));
     adminFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     
-    
-    
-    
-    
-    
-    
     //EDIT SOURCES, should be working as of now
     JButton edit = new JButton("Edit a Text");
     edit.addActionListener(new ActionListener()
@@ -75,13 +69,13 @@ public class AdminGUI
     	 
     	    JPanel oldTitleBoxPanel = new JPanel(new FlowLayout());
     	    oldTitleBoxPanel.add(new JLabel("Old Title*: "));
-    	    JTextField ottf = new JTextField(20);
+    	    final JTextField ottf = new JTextField(20);
     	 
     	    oldTitleBoxPanel.add(ottf);
 
     	    JPanel oldAuthorBoxPanel = new JPanel(new FlowLayout());
     	    oldAuthorBoxPanel.add(new JLabel("Old Author*: "));
-    	    JTextField oatf = new JTextField(20);
+    	    final JTextField oatf = new JTextField(20);
 
     	    oldAuthorBoxPanel.add(oatf);
 
@@ -131,8 +125,7 @@ public class AdminGUI
 	    	        	  try {
 							while ((line = br.readLine()) != null)  
 							  {  
-									//parse line for author
-								//TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
+									
 								text1 += line + "\n";
 								
 							     
@@ -145,29 +138,26 @@ public class AdminGUI
 							//	System.out.println(lh);
 								if(split[i].indexOf("Title:") != -1)
 								{
-									split[i] = "Title: " + nttf.getText();
-//									String [] tit = split[i].split("\n");
-//									String holder = "";
-//									for(int ii = 0; ii < tit.length; ii++)
-//									{
-//										holder += tit[ii].substring(tit[ii].indexOf(':'), tit[ii].length());
-//										holder.replace("\n", "");
-//									}
-//									split[i] = "Title: " + nttf.getText();
-//									System.out.println("lh = " + split[i]);
+									String s = split[i].substring(7, split[i].length());
+									s.replace("\n", "");
+									System.out.println("TITLE = " + s);
+									if(s.equalsIgnoreCase(ottf.getText()))
+									{
+										split[i] = "Title: " + nttf.getText();										
+									}
+
 								}
 								if(split[i].indexOf("Author:") != -1)
 								{
+									String s = split[i].substring(8, split[i].length());
+									s.replace("\n", "");
+									System.out.println("author = " + s);
+									if(s.equalsIgnoreCase(oatf.getText()))
+									{
 									split[i] = "Author: " + natf.getText();
-//									String [] tit = split[i].split("\n");
-//									String holder = "";
-//									for(int ii = 0; ii < tit.length; ii++)
-//									{
-//										holder += tit[ii].substring(tit[ii].indexOf(':'), tit[ii].length());
-//										holder.replace("\n", "");
-//									}
-//									split[i] = "Title: " + nttf.getText();
-//									System.out.println("lh = " + split[i]);
+									break;
+									}
+
 								}
 							}
 							FileWriter fw = new FileWriter(child);
@@ -427,12 +417,7 @@ public class AdminGUI
 	          }
 	        }
 	        ;
-	       
 	      }
-    	
-    	
-    	
-    	
     });
     
     
@@ -453,8 +438,6 @@ public class AdminGUI
             }
     	}});
     
-    
-    
     JPanel continuePanel = new JPanel(new FlowLayout());
     continuePanel.add(settings);
 
@@ -463,8 +446,6 @@ public class AdminGUI
     continuePanel.add(search);
 
     welcomeFrame.add(continuePanel, BorderLayout.SOUTH);
-    
-    
     
     //logo should be put in with the package
     JLabel logo = new JLabel(new ImageIcon("//home//student//Desktop//gslogo.png"));
@@ -503,15 +484,5 @@ public class AdminGUI
 //            	JOptionPane.showMessageDialog(chooser, "Directory Selected", "Confirmation", JOptionPane.PLAIN_MESSAGE);
 //            }
 //    	}});
-
-    
-    
-
-    
-    
-      
   }
-  
-  
-
 }
