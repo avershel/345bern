@@ -63,8 +63,11 @@ public class AdminGUI
 
     	public void actionPerformed(ActionEvent e){
     		welcomeFrame.setVisible(false);
-    		adminFrame.setVisible(true);   
-    		adminFrame.setTitle(("Admin: Edit Sources"));
+    		final JFrame adminFrame1 = new JFrame("Admin: Edit Sources");
+    		adminFrame1.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    		adminFrame1.setLayout(new GridLayout(6, 1));
+    		adminFrame1.setSize(420, 420);  
+//    		adminFrame1.setTitle(("Admin: Edit Sources"));
 
 
     	    
@@ -95,19 +98,19 @@ public class AdminGUI
 
     	    JButton editSource = new JButton("Apply Edits");
     	    adminButtonPanel.add(editSource);
-//    	    JButton back = new JButton("Back");
-//    	    adminButtonPanel.add(back);
-//
-//    	    back.addActionListener(new ActionListener()
-//    	    {
-//    	      public void actionPerformed(ActionEvent e)
-//    	      {
-//    	    	  adminFrame.setVisible(false);
-//    	    	  adminButtonPanel.removeAll();
-//
-//    	    	  welcomeFrame.setVisible(true);
-//    	      }
-//    	    });
+    	    JButton back = new JButton("Back");
+    	    adminButtonPanel.add(back);
+
+    	    back.addActionListener(new ActionListener()
+    	    {
+    	      public void actionPerformed(ActionEvent e)
+    	      {
+    	    	  adminFrame1.setVisible(false);
+    	    	  adminButtonPanel.removeAll();
+
+    	    	  welcomeFrame.setVisible(true);
+    	      }
+    	    });
     	    
     	    
     	    editSource.addActionListener(new ActionListener()
@@ -168,11 +171,12 @@ public class AdminGUI
     	    list.add(oatf);
     	    list.add(natf);
 
-    	    adminFrame.add(oldTitleBoxPanel);
-    	    adminFrame.add(newTitleBoxPanel);
-    	    adminFrame.add(oldAuthorBoxPanel);
-    	    adminFrame.add(newAuthorBoxPanel);
-    	    adminFrame.add(adminButtonPanel);
+    	    adminFrame1.add(oldTitleBoxPanel);
+    	    adminFrame1.add(newTitleBoxPanel);
+    	    adminFrame1.add(oldAuthorBoxPanel);
+    	    adminFrame1.add(newAuthorBoxPanel);
+    	    adminFrame1.add(adminButtonPanel);
+    		adminFrame1.setVisible(true);   
 
     	}});
     
