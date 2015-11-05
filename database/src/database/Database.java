@@ -129,6 +129,10 @@ public class Database {
     return new Search(query).results();
   }
 
+  public String AdvancedSearch(String query)
+  {
+    return new AdvancedSearch(query).results();
+  }
   /**
    * Edits the source title and author of paragraph objects that match the entered "title" and "author" strings.
    * if the Administrator wants to edit those attributes
