@@ -83,13 +83,22 @@ public class UserGUI
             welcomeFrame.setVisible(false);
             userFrame.setVisible(true);
         }});
+    final JButton help = new JButton("Help");
+    help.addActionListener(new ActionListener(){
+    	public void actionPerformed(ActionEvent e){
+    		JOptionPane.showMessageDialog(help, "Choose directory before beginning.\n  The directory chosen will be the place where the text files are being held.\n  Afterwards, you may continue to search.", "Help", JOptionPane.PLAIN_MESSAGE);
+
+    	}});
+    
     
     JPanel continuePanel = new JPanel(new FlowLayout());
     continuePanel.add(settings);
     continuePanel.add(search);
+    continuePanel.add(help);
+
     welcomeFrame.add(continuePanel, BorderLayout.SOUTH);
     
-    JLabel logo = new JLabel(new ImageIcon("/cs/home/stu/fowlerne/gslogo.png"));
+    JLabel logo = new JLabel(new ImageIcon("/Users/Austin/Desktop/gslogo.png"));
     JPanel logoPanel = new JPanel(new BorderLayout());
     logoPanel.setBackground(Color.WHITE);
     logoPanel.add(logo, BorderLayout.CENTER);
@@ -266,21 +275,18 @@ public class UserGUI
     JButton advancedSearch = new JButton("Advanced Search");
     advancedSearch.addActionListener(new ActionListener(){
         public void actionPerformed(ActionEvent e){
-            System.out.println( "da buggssssss" );
-            //searchPanel.remove(advancedSearch);
             searchPanel.removeAll();
             searchPanel.invalidate();
             searchPanel.repaint();
             searchPanel.add(searchLabelPanel, BorderLayout.NORTH);
             searchPanel.add(searchInputPanel, BorderLayout.CENTER);
             advanced = true;
-            //System.exit(0);
         }});
     
     JPanel advancedSearchPanel = new JPanel(new FlowLayout());
     advancedSearchPanel.add(advancedSearch);
     searchPanel.add(advancedSearchPanel, BorderLayout.EAST); //shift to right
-  
+
     
     //add components to main panel
     JPanel textBoxPanel = new JPanel(new BorderLayout());
