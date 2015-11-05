@@ -15,6 +15,7 @@ public class Database {
   public static HashMap<String, Bucket> buckets;
   public static int arrindex = 0;
   public static HashMap<String, ParagraphObject> pomap;
+  public static int textcount = 0;
 
   /*
    * A ParagraphObject constructor
@@ -45,6 +46,7 @@ public class Database {
    */
   public static String readFile(String fileName) throws IOException
   {
+	  textcount++;
     BufferedReader buffread = new BufferedReader(new FileReader(fileName));
     try
     {
