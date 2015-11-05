@@ -4,10 +4,13 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Timer;
@@ -23,6 +26,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
@@ -59,6 +63,7 @@ public class UserGUI
 	final JFrame welcomeFrame = new JFrame("GutenSearch");
     welcomeFrame.setSize(800,800);
     welcomeFrame.setLayout(new BorderLayout());
+    welcomeFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     
     JButton settings = new JButton("Choose Directory");
     settings.addActionListener(new ActionListener(){
@@ -261,7 +266,120 @@ public class UserGUI
     JButton advancedSearch = new JButton("Advanced Search");
     advancedSearch.addActionListener(new ActionListener(){
     	public void actionPerformed(ActionEvent e){
-    		System.exit(0);
+
+    		userFrame.setVisible(false);
+    		
+    		//panels for search section
+    	    JPanel searchLabelPanelAdv = new JPanel(new FlowLayout());
+    	    JPanel searchInputPanelAdv = new JPanel(new FlowLayout());
+    	    JLabel searchLabelAdv = new JLabel("Enter Search Terms:");
+    	    JPanel searchPanelAdv = new JPanel(new BorderLayout());
+    	    
+    	    JLabel searchLabel1 = new JLabel("                                  ");
+    	   // JPanel searchPanel1 = new JPanel(new BorderLayout());
+    	    
+    	    //text areas for search field and results
+    	    final JTextField searchTextAdv = new JTextField(25);
+    	    final JTextArea resultTextAdv = new JTextArea();
+    	    resultTextAdv.setLineWrap(true);
+    	    resultTextAdv.setEditable(false);
+    	    
+    	    //add details to panels
+    	    searchLabelPanelAdv.add(searchLabelAdv);
+    	    searchLabelPanelAdv.add(searchLabel1);
+
+    	    searchInputPanelAdv.add(searchTextAdv);
+    	    searchPanelAdv.add(searchLabelPanelAdv, BorderLayout.NORTH);
+    	    searchPanelAdv.add(searchInputPanelAdv, BorderLayout.CENTER);
+    	    
+    	    //panels for result section
+    	    JPanel resultLabelPanelAdv = new JPanel(new FlowLayout());
+    	    final JLabel resultLabelAdv = new JLabel("Results");
+    	    JPanel resultPanelAdv = new JPanel(new BorderLayout());
+    	    JScrollPane scrollPaneAdv = new JScrollPane(resultTextAdv);
+
+    	    
+    	    //panels for search results
+    	    resultLabelPanelAdv.add(resultLabelAdv);
+    	    resultPanelAdv.add(resultLabelPanelAdv, BorderLayout.NORTH);
+    	    resultPanelAdv.add(scrollPaneAdv, BorderLayout.CENTER);
+    	    
+    	    JPanel resultPanel2 = new JPanel(new FlowLayout());
+    	    resultPanel2.add(resultLabelPanelAdv, BorderLayout.NORTH);
+    	    resultPanel2.add(scrollPaneAdv, BorderLayout.CENTER);
+    	    
+    	    JPanel resultPanel3 = new JPanel(new FlowLayout());
+    	    resultPanel3.add(resultLabelPanelAdv, BorderLayout.NORTH);
+    	    resultPanel3.add(scrollPaneAdv, BorderLayout.CENTER);
+    	    
+    	    JPanel resultPanel4 = new JPanel(new FlowLayout());
+    	    resultPanel4.add(resultLabelPanelAdv, BorderLayout.NORTH);
+    	    resultPanel4.add(scrollPaneAdv, BorderLayout.CENTER);
+    	    
+    	    resultPanelAdv.add(resultLabelPanelAdv, BorderLayout.NORTH);
+    	    resultPanelAdv.add(scrollPaneAdv, BorderLayout.CENTER);
+    	    
+    	    //add tabs
+    	    tabPane.addTab("Result 1", resultPanelAdv);	
+    	    tabPane.addTab("Result 2", resultPanel2Adv);
+    	    tabPane.addTab("Result 3", resultPanel3Adv);
+    	    tabPane.addTab("Result 4", resultPanel4Adv);
+    	    
+    	    //action listener for search button
+    	    searchText.addActionListener(new ActionListener(){
+    	      public void actionPerformed(ActionEvent e){
+    	    	  long startTime = System.currentTimeMillis();
+    	    	  long elapsedTime = 0L;
+
+
+    	    	  String result = db.search(searchText.getText());
+    	    	    elapsedTime = (new Date()).getTime() - startTime;
+    	    	    double seconds = elapsedTime/ 1000.0;
+
+    	    	  resultLabel.setText("Results:(Searched " + Database.textcount + " Texts in "+ seconds + " Seconds)");
+    	    	  
+    	    	  if(result.equals("QUERY TERM NOT FOUND"))
+    	    	  {
+    	    		  resultText.setText("");
+    	    		  JOptionPane.showMessageDialog(userFrame, result, "Error", JOptionPane.ERROR_MESSAGE);
+    	    	  }
+    	    	  else
+    	    	  {
+    	    		  resultText.setText(db.search(searchText.getText()));
+    	    	      int index = resultText.getText().indexOf(searchText.getText());
+    	    	      int len = searchText.getText().length();
+    	    	      Highlighter highlighter = resultText.getHighlighter();
+    	    	      HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
+    	    	      while ( index >= 0 ) {
+    	    	         try
+    	    	         {
+    	    	             highlighter.addHighlight(index, index+len, painter);
+    	    	         }
+    	    	         catch ( BadLocationException e1 )
+    	    	         {
+    	    	             // TODO Auto-generated catch block
+    	    	             e1.printStackTrace();
+    	    	         }
+    	    	         index = resultText.getText().indexOf(searchText.getText(), index+len);
+    	    	        }
+
+    	    	  }
+    	      }});
+    	    
+    	    //button for clearing the search
+    	    JButton clearSearch = new JButton("Clear Search");
+    	    clearSearch.addActionListener(new ActionListener(){
+    	      public void actionPerformed(ActionEvent e){
+    	        searchText.setText("");
+    	        resultText.setText("");
+    	      }});
+    	    
+    	    //panel for the search button
+    	    JPanel clearPanel = new JPanel(new FlowLayout());
+    	    clearPanel.add(clearSearch);
+    	    resultPanel.add(clearPanel, BorderLayout.SOUTH);
+
+    	    userFrame.setVisible(true);
     	}});
     
     JPanel advancedSearchPanel = new JPanel(new FlowLayout());
@@ -274,6 +392,8 @@ public class UserGUI
     textBoxPanel.add(searchPanel, BorderLayout.NORTH);
     textBoxPanel.add(tabPane, BorderLayout.CENTER);
     userFrame.add(textBoxPanel, BorderLayout.CENTER);
+    userFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
 
   }
 }
