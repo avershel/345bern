@@ -1,34 +1,16 @@
 package GutenSearch;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Writer;
-import java.util.ArrayList;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
+import javax.swing.text.Highlighter.HighlightPainter;
+
 
 /*
  * AdminGUI
@@ -41,8 +23,10 @@ public class AdminGUI
 
   ArrayList<JTextField> list = new ArrayList<JTextField>();
   Database db = new Database();
-  JFrame adminFrame;
-  String destination = "$HOME//Destop";
+  JFrame adminFrame = new JFrame("Admin");
+  String destination = "$HOME//Desktop";
+  JTabbedPane tabPane = new JTabbedPane();
+
 
   /*
    * main
@@ -56,25 +40,163 @@ public class AdminGUI
 
   private void adminGUI()
   {
-    final JFrame welcomeFrame = new JFrame("GutenSearch");
+    //instantiate welcomeFrame
+	final JFrame welcomeFrame = new JFrame("GutenSearch");
     welcomeFrame.setSize(800,800);
     welcomeFrame.setLayout(new BorderLayout());
+    welcomeFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    //instantiate adminFrame
+    adminFrame.setSize(800, 800);
+    adminFrame.setLayout(new GridLayout(6, 1));
+    adminFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     
     
     
     
     //LINK TO UserGUI SEARCH CODE
-    JButton search = new JButton("Go to GutenSearch");
+    final JButton search = new JButton("Go to GutenSearch");
     search.addActionListener(new ActionListener()
     {
     	public void actionPerformed(ActionEvent e){
     		welcomeFrame.setVisible(false);
-    		adminFrame = new JFrame("Admin");
-    	    adminFrame.setSize(800, 800);
+    		adminFrame.setTitle("Admin: Search Books");
     		adminFrame.setVisible(true);
-    	    adminFrame.setLayout(new GridLayout(6, 1));
-  
-    	}});
+  		  
+    		//pas
+    		
+//  		  tabPane.addTab("Tab 1", resultPanel,
+//  	              "Does nothing");	  	
+  		  File folder = new File(destination);
+  		    File[] listOfFiles = folder.listFiles();
+  		 
+  		    for (int i = 0; i < listOfFiles.length; i++) {
+  		      File file = listOfFiles[i];
+  		      if (file.isFile() ) {
+  		        try
+  		        {
+  		          db.addTxtFiles(file);
+  		        }
+  		        catch (FileNotFoundException e1)
+  		        {
+  		          // TODO Auto-generated catch block
+  		          e1.printStackTrace();
+  		        }
+  		        catch (IOException e1)
+  		        {
+  		          // TODO Auto-generated catch block
+  		          e1.printStackTrace();
+  		        }
+  		        //String content = FileUtils.readFileToString(file);
+  		        /* do somthing with content */
+  		      }
+  		    }
+  		 
+  		//panels for search section
+  	    JPanel searchLabelPanel = new JPanel(new FlowLayout());
+  	    JPanel searchInputPanel = new JPanel(new FlowLayout());
+  	    JLabel searchLabel = new JLabel("Enter Search Terms");
+  	    JPanel searchPanel = new JPanel(new BorderLayout());
+  	    
+  	    //text areas for search field and results
+  	    final JTextField searchText = new JTextField(25);
+  	    final JTextArea resultText = new JTextArea();
+  	    resultText.setLineWrap(true);
+  	    resultText.setEditable(false);
+  	    
+  	    //add details to panels
+  	    searchLabelPanel.add(searchLabel);
+  	    searchInputPanel.add(searchText);
+  	    searchPanel.add(searchLabelPanel, BorderLayout.NORTH);
+  	    searchPanel.add(searchInputPanel, BorderLayout.CENTER);
+  	    
+  	    //panels for result section
+  	    JPanel resultLabelPanel = new JPanel(new FlowLayout());
+  	    JLabel resultLabel = new JLabel("Results");
+  	    JPanel resultPanel = new JPanel(new BorderLayout());
+  	    JScrollPane scrollPane = new JScrollPane(resultText);
+
+  	    
+  	    //panels for search results
+  	    resultLabelPanel.add(resultLabel);
+  	    resultPanel.add(resultLabelPanel, BorderLayout.NORTH);
+  	    resultPanel.add(scrollPane, BorderLayout.CENTER);
+  	    
+  	    JPanel resultPanel2 = new JPanel(new FlowLayout());
+  	    resultPanel2.add(resultLabelPanel, BorderLayout.NORTH);
+  	    resultPanel2.add(scrollPane, BorderLayout.CENTER);
+  	    
+  	    JPanel resultPanel3 = new JPanel(new FlowLayout());
+  	    resultPanel3.add(resultLabelPanel, BorderLayout.NORTH);
+  	    resultPanel3.add(scrollPane, BorderLayout.CENTER);
+  	    
+  	    JPanel resultPanel4 = new JPanel(new FlowLayout());
+  	    resultPanel4.add(resultLabelPanel, BorderLayout.NORTH);
+  	    resultPanel4.add(scrollPane, BorderLayout.CENTER);
+  	    
+  	    resultPanel.add(resultLabelPanel, BorderLayout.NORTH);
+  	    resultPanel.add(scrollPane, BorderLayout.CENTER);
+  	    
+  	    //add tabs
+  	    tabPane.addTab("Result 1", resultPanel);	
+  	    tabPane.addTab("Result 2", resultPanel2);
+  	    tabPane.addTab("Result 3", resultPanel3);
+  	    tabPane.addTab("Result 4", resultPanel4);
+  	    
+  	    //action listener for search button
+  	    searchText.addActionListener(new ActionListener(){
+  	      public void actionPerformed(ActionEvent e){
+  	    	  String result = db.search(searchText.getText());
+  	    	  
+  	    	  if(result.equals("QUERY TERM NOT FOUND"))
+  	    	  {
+  	    		  resultText.setText("");
+  	    		  JOptionPane.showMessageDialog(adminFrame, result, "Error", JOptionPane.ERROR_MESSAGE);
+  	    	  }
+  	    	  else
+  	    	  {
+  	    		  resultText.setText(db.search(searchText.getText()));
+  	    	      int index = resultText.getText().indexOf(searchText.getText());
+  	    	      int len = searchText.getText().length();
+  	    	      Highlighter highlighter = resultText.getHighlighter();
+  	    	      HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
+  	    	      while ( index >= 0 ) {
+  	    	         try
+  	    	         {
+  	    	             highlighter.addHighlight(index, index+len, painter);
+  	    	         }
+  	    	         catch ( BadLocationException e1 )
+  	    	         {
+  	    	             // TODO Auto-generated catch block
+  	    	             e1.printStackTrace();
+  	    	         }
+  	    	         index = resultText.getText().indexOf(searchText.getText(), index+len);
+  	    	        }
+
+  	    	  }
+  	      }});
+  	    
+  	    //button for clearing the search
+  	    JButton clearSearch = new JButton("Clear Search");
+  	    clearSearch.addActionListener(new ActionListener(){
+  	      public void actionPerformed(ActionEvent e){
+  	        searchText.setText("");
+  	        resultText.setText("");
+  	      }});
+  	    
+  	    //panel for the search button
+  	    JPanel clearPanel = new JPanel(new FlowLayout());
+  	    clearPanel.add(clearSearch);
+  	    resultPanel.add(clearPanel, BorderLayout.SOUTH);
+  	    
+  	    //add components to main panel
+  	    JPanel textBoxPanel = new JPanel(new BorderLayout());
+  	    textBoxPanel.add(searchPanel, BorderLayout.NORTH);
+  	    textBoxPanel.add(tabPane, BorderLayout.CENTER);
+  	    adminFrame.add(textBoxPanel, BorderLayout.CENTER);
+  	    adminFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    		
+    											  }
+    	});
     
     
     
@@ -84,11 +206,10 @@ public class AdminGUI
     {
     	public void actionPerformed(ActionEvent e){
     		welcomeFrame.setVisible(false);
-    		adminFrame = new JFrame("Admin");
-    	    adminFrame.setSize(800, 800);
-    		adminFrame.setVisible(true);
-    	    adminFrame.setLayout(new GridLayout(6, 1));
-    	    
+    		adminFrame.setVisible(true);   
+    		adminFrame.setTitle(("Admin: Edit Sources"));
+
+
     	    
     	    JPanel adminButtonPanel = new JPanel();
     	 
@@ -123,9 +244,7 @@ public class AdminGUI
     	      {
     	        db.editBook(list.get(0).getText(), list.get(1).getText(), list.get(2).getText(), list
     	            .get(3).getText());
-    	        
-    	        
-    	        
+    	           
     	        File dir = new File(destination);
     	        File[] directoryListing = dir.listFiles();
     	        String text1 = "";
@@ -176,6 +295,7 @@ public class AdminGUI
     
     
     final JPanel adminButtonPanel = new JPanel();
+   
     //Upload File
     JButton upload = new JButton("Upload a Text");
     upload.addActionListener(new ActionListener()
@@ -183,14 +303,14 @@ public class AdminGUI
     	public void actionPerformed(ActionEvent e)
     	{
     		welcomeFrame.setVisible(false);
-    		adminFrame = new JFrame("Admin");
-    	    adminFrame.setSize(800, 800);
-    	    adminFrame.setLayout(new GridLayout(6, 1));
+    		adminFrame.setTitle("Admin: Upload a Source");
+  
     	    adminFrame.add(adminButtonPanel);
     	    adminFrame.setVisible(true);
     	    		//2nd tier frame, choose file
     	    JButton uploadFile = new JButton("Choose File");
     	    adminButtonPanel.add(uploadFile);
+    	    adminButtonPanel.add(search);
     	    uploadFile.addActionListener(new ActionListener()
     	    {
     	      public void actionPerformed(ActionEvent e)
@@ -285,7 +405,6 @@ public class AdminGUI
     
     logoPanel.add(gutenPanel, BorderLayout.NORTH);
    
-    logoPanel.setBackground(Color.WHITE);
 
     welcomeFrame.add(logoPanel, BorderLayout.CENTER);
     welcomeFrame.setVisible(true);
@@ -311,5 +430,9 @@ public class AdminGUI
             }
     	}});
 
+      
   }
+  
+  
+
 }
