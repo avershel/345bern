@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Date;
+import java.util.Timer;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -148,8 +150,11 @@ public class UserGUI
 	//panels for search section
     JPanel searchLabelPanel = new JPanel(new FlowLayout());
     JPanel searchInputPanel = new JPanel(new FlowLayout());
-    JLabel searchLabel = new JLabel("Enter Search Terms");
+    JLabel searchLabel = new JLabel("Enter Search Terms:");
     JPanel searchPanel = new JPanel(new BorderLayout());
+    
+    JLabel searchLabel1 = new JLabel("                                  ");
+   // JPanel searchPanel1 = new JPanel(new BorderLayout());
     
     //text areas for search field and results
     final JTextField searchText = new JTextField(25);
@@ -159,13 +164,15 @@ public class UserGUI
     
     //add details to panels
     searchLabelPanel.add(searchLabel);
+    searchLabelPanel.add(searchLabel1);
+
     searchInputPanel.add(searchText);
     searchPanel.add(searchLabelPanel, BorderLayout.NORTH);
     searchPanel.add(searchInputPanel, BorderLayout.CENTER);
     
     //panels for result section
     JPanel resultLabelPanel = new JPanel(new FlowLayout());
-    JLabel resultLabel = new JLabel("Results");
+    final JLabel resultLabel = new JLabel("Results");
     JPanel resultPanel = new JPanel(new BorderLayout());
     JScrollPane scrollPane = new JScrollPane(resultText);
 
@@ -199,7 +206,15 @@ public class UserGUI
     //action listener for search button
     searchText.addActionListener(new ActionListener(){
       public void actionPerformed(ActionEvent e){
+    	  long startTime = System.currentTimeMillis();
+    	  long elapsedTime = 0L;
+
+
     	  String result = db.search(searchText.getText());
+    	    elapsedTime = (new Date()).getTime() - startTime;
+    	    double seconds = elapsedTime/ 1000.0;
+
+    	  resultLabel.setText("Results:(Searched " + Database.textcount + " Texts in "+ seconds + " Seconds)");
     	  
     	  if(result.equals("QUERY TERM NOT FOUND"))
     	  {
@@ -241,6 +256,18 @@ public class UserGUI
     JPanel clearPanel = new JPanel(new FlowLayout());
     clearPanel.add(clearSearch);
     resultPanel.add(clearPanel, BorderLayout.SOUTH);
+    
+  //Advanced Search button
+    JButton advancedSearch = new JButton("Advanced Search");
+    advancedSearch.addActionListener(new ActionListener(){
+    	public void actionPerformed(ActionEvent e){
+    		System.exit(0);
+    	}});
+    
+    JPanel advancedSearchPanel = new JPanel(new FlowLayout());
+    advancedSearchPanel.add(advancedSearch);
+    searchPanel.add(advancedSearchPanel, BorderLayout.EAST); //shift to right
+    
     
     //add components to main panel
     JPanel textBoxPanel = new JPanel(new BorderLayout());
