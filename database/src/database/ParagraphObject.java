@@ -133,7 +133,7 @@ public class ParagraphObject {
     String str = String.format("Title: %s\nAuthor: %s\nOrdinal: %d\n", title, author, ordinal);
     for(int i = 0; i < paragraph.length(); i++)
     {
-        if('.' == paragraph.charAt(i))
+        if('.' == paragraph.charAt(i) || '!' == paragraph.charAt(i) || '?' == paragraph.charAt(i))
         {
             return str += paragraph.substring(0,i+1) + "\n\n";
         }
