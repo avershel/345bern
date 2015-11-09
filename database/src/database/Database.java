@@ -16,6 +16,7 @@ public class Database {
   public static int arrindex = 0;
   public static HashMap<String, ParagraphObject> pomap;
   public static int textcount = 0;
+  public  HashMap<String, String> history;
 
   /*
    * A ParagraphObject constructor
@@ -25,6 +26,8 @@ public class Database {
   {
     buckets = new HashMap<String,Bucket>();
     pomap = new HashMap<String,ParagraphObject>();
+    history = new HashMap<String,String>();
+
   }
 
   /*
@@ -126,7 +129,8 @@ public class Database {
    */
   public String search(String query)
   {
-    return new Search(query).results();
+	  history.put(query, new Search(query).results());
+    return history.get(query);
   }
 
   public String AdvancedSearch(String query)
@@ -161,5 +165,15 @@ public class Database {
         }
       }
     }
+  }
+  
+  public String getHistory()
+  {
+	  String str = "";
+	  for(String key: history.keySet())
+	  {
+		  str += key + ":\n" + history.get(key) + "--------------------------------\n\n\n";
+	  }
+	  return str;
   }
 }
