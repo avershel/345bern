@@ -56,7 +56,8 @@ public class UserGUI implements ActionListener
       //Main menu
       JMenuBar menuBar = new JMenuBar();
       JMenu file = new JMenu("File");
-      JMenu help = new JMenu("Help");
+	    JMenu help = new JMenu("Help");
+	    
       menuBar.add(file);
       menuBar.add(help);
 
@@ -64,17 +65,20 @@ public class UserGUI implements ActionListener
       JMenuItem chooseDir = new JMenuItem("Choose Directory");
       chooseDir.addActionListener(this);
       file.add(chooseDir);
-//      JMenu upload = new JMenu("Upload...");
-//      JMenuItem upDir = new JMenuItem("Upload Directory");
-//      upDir.addActionListener(this);
-//      JMenuItem upFile = new JMenuItem("Upload File");
-//      upFile.addActionListener(this);
-//      JMenuItem edit = new JMenuItem("Edit a Source");
-//      edit.addActionListener(this);
-//      upload.add(upDir);
-//      upload.add(upFile);
-//      file.add(upload);
-//      file.add(edit);
+
+      JMenuItem helppage = new JMenuItem("Help Page");
+      helppage.addActionListener(new ActionListener(){
+	    	public void actionPerformed(ActionEvent e){
+
+	//    		System.out.println("help gui 1");
+//	    		userFrame.dispose();
+	    		String content = ("Before you begin using GutenSearch, you must select a directory.\nThis Directory should "
+	    				+ "be the location where your text files are held.\nYour search will search through the text files in the selected directory.\n");
+	    		JOptionPane.showMessageDialog(userFrame, content, "Confirmation", JOptionPane.PLAIN_MESSAGE);
+
+	    	}
+	    });      
+      help.add(helppage);
       
       //Help
       
@@ -205,7 +209,17 @@ public void searchGUI()
 	    JMenu file = new JMenu("File");
 	    JMenu history = new JMenu("History");
 	    JMenu help = new JMenu("Help");
-	    
+	    JMenuItem helppage = new JMenuItem("Help Page");
+	    helppage.addActionListener(new ActionListener(){
+	    	public void actionPerformed(ActionEvent e){
+	    		//searchFrame.dispose();
+	    		String content = ("Enter specific words to search for in the text area, then press enter.\nGutenSearch will return listings of texts containing "
+	    				+ "the word(s) by listing their title, author, ordinal number, and the first sentence.\nYou may search for multiple words with an '&' which will return texts that contain each of the words.\nYou may search for multiple words with an '*' which will return texts that contain either of the words.\n");
+	    		JOptionPane.showMessageDialog(userFrame, content, "Confirmation", JOptionPane.PLAIN_MESSAGE);
+
+	    	}
+	    });
+	    help.add(helppage);
 	    //history
 	    JMenuItem terms = new JMenuItem("All Terms Searched");
 	    terms.addActionListener(new ActionListener(){
@@ -399,4 +413,5 @@ public void searchGUI()
 											  
 	
 }
+
 }
