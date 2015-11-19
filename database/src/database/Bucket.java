@@ -3,9 +3,9 @@ package GutenSearch;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-/*
+/**
  * Bucket
- * A class that creates a Bucket
+ * A class that creates a Bucket 
  *
  * @author group 7
  */
@@ -14,7 +14,7 @@ public class Bucket implements Iterable<ParagraphObject>{
   public Set<ParagraphObject> parList = new HashSet<ParagraphObject>();
   public int size = 0;
 
-  /*
+  /**
    * A ParagraphObject constructor
    * @param BucketKey the key of the Bucket
    */
@@ -23,7 +23,7 @@ public class Bucket implements Iterable<ParagraphObject>{
     this.key = BucketKey;
   }
 
-  /*
+  /**
    * A helper method for accepting ParagraphObjects
    *
    * @param po the ParagraphObject to add
@@ -34,7 +34,7 @@ public class Bucket implements Iterable<ParagraphObject>{
     size++;
   }
 
-  /*
+  /**
    * A helper method to convert the Bucket to string
    *
    * @return str the string representation of the Bucket
@@ -49,7 +49,7 @@ public class Bucket implements Iterable<ParagraphObject>{
     return str;
   }
 
-  /*
+  /**
    * A helper method to convert the Bucket to string
    *
    * @return parlist.size the size of the Bucket
