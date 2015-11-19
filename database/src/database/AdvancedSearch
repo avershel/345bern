@@ -3,9 +3,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-/*
+/**
  * search1
- * A class that handles searching
+ * A class that handles searching with advanced features
  *
  * @author group 7
  */
@@ -17,7 +17,7 @@ public class AdvancedSearch {
   String []expholder;
   int index = 0;
 
-  /*
+  /**
    * A search object constructor
    *
    * @param query - the term(s) to be searched
@@ -93,7 +93,7 @@ public class AdvancedSearch {
     }
   }
 
-  /*
+  /**
    * A helper method for parsing OR terms
    *
    * @param exp - the expression to be parsed
@@ -117,7 +117,7 @@ public class AdvancedSearch {
     }
   }
 
-  /*
+  /**
    * A helper method for parsing single terms
    *
    * @param exp - the expression to be parsed
@@ -135,7 +135,7 @@ public class AdvancedSearch {
      }
    }
 
-   /*
+   /**
     * A helper method for parsing AND terms
     *
     * @param holder - an array containing joined expressions
@@ -183,7 +183,7 @@ public class AdvancedSearch {
      l1.retainAll(ll1);
    }
 
-   /*
+   /**
     * A method to return the results of the search
     *
     * @return a String representation of the search results
@@ -212,7 +212,7 @@ public class AdvancedSearch {
      }
    }
 
-   /*
+   /**
     * A helper method for parsing wildcard expressions
     *
     * @param text - the expression to be parsed
@@ -232,7 +232,7 @@ public class AdvancedSearch {
      }
    }
 
-   /*
+   /**
     * A helper method for parsing star expressions
     *
     * @param text - the expression to be parsed
