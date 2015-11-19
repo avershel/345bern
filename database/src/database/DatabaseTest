@@ -3,9 +3,11 @@ package GutenSearch;
 import static org.junit.Assert.*;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 
 import org.junit.Test;
 
@@ -94,9 +96,18 @@ public class DatabaseTest {
     }
 
     @Test
-    public void testEditBook() {
+    public void testEditBook() throws IOException {
     	Database testDatabase = new Database();
-    	testDatabase.editBook("title", "author", "newTitle", "newAuthor");
+    	File testFile = new File("testname.txt");
+    	PrintWriter writer = new PrintWriter("testname.txt", "UTF-8");
+    	writer.println("\nTitle: Elizabethan Sea Dogs\n");
+    	writer.println("Author: William Wood\n");
+    	writer.println("body of paragraph\n");
+    	writer.close();
+    	testDatabase.addTxtFiles(testFile);
+    	testDatabase.search("body");
+    	testDatabase.editBook("Elizabethan Sea Dogs", "William Wood", "newTitle", "newAuthor");
+    	testDatabase.editBook("Elizabethan Sea Dogs", "", "newTitle", "newAuthor");
     }
 
     @Test
