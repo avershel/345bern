@@ -1,0 +1,84 @@
+package GutenSearch;
+
+import static org.junit.Assert.*;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+
+import org.junit.Test;
+
+public class AdvancedSearchTest {
+
+	Database testDatabase = new Database();
+		
+	@Test
+	public void SearchConstTest() 
+	{
+		new Search("Hello?");
+	}
+	
+	@Test
+	public void SearchConstTest2() throws IOException 
+	{		
+		Database testDatabase = new Database();
+    	File testFile = new File("testname.txt");
+    	PrintWriter writer = new PrintWriter("testname.txt", "UTF-8");
+    	writer.println("Title: Elizabethan Sea Dogs\n");
+    	writer.println("Author: William Wood\n");
+    	writer.println("body of paragraph\n");
+    	writer.close();
+    	testDatabase.addTxtFiles(testFile);
+    	testDatabase.AdvancedSearch("body");
+    	testDatabase.AdvancedSearch("words");
+    	testDatabase.AdvancedSearch("");
+	}
+	
+	@Test
+	public void TestParseOr() 
+	{
+		AdvancedSearch testSearch = new AdvancedSearch("Yo&Yo");
+		testSearch.parseOr("Yo&Yo");
+	}
+	
+	@Test
+	public void TestAddPars() 
+	{
+		assertEquals(1,1);
+	}
+	
+	@Test
+	public void TestParseAnd()
+	{
+		AdvancedSearch testSearch = new AdvancedSearch("Yo");
+		String[] elements = new String[10];
+		testSearch.parseAnd(elements); 
+	}
+	
+	@Test
+	public void TestResults()
+	{
+		AdvancedSearch testSearch = new AdvancedSearch("Yo");
+		assertEquals("QUERY TERM NOT FOUND", testSearch.results());
+	}
+	
+	@Test
+	public void TestWild()
+	{
+		AdvancedSearch testSearch = new AdvancedSearch("QuestionMark?");
+		
+		testSearch.wild("LotsofQuestionMarks?");
+	}
+	
+	@Test
+	public void TestStar()
+	{
+		AdvancedSearch testSearch = new AdvancedSearch("WeeLittleStar*");
+		
+		testSearch.star("EvenMoreDamnStars*");
+	}
+}
