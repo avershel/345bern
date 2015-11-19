@@ -24,22 +24,24 @@ public class AdminGUI implements ActionListener
   ArrayList<JTextField> list = new ArrayList<JTextField>();
   Database db = new Database();
   String destination = "$HOME//Desktop";
-  String defaultdest = "$HOME//Desktop";
+  static String defaultdest = "$HOME//Desktop";
 
   JTabbedPane tabPane = new JTabbedPane();
   JFrame adminFrame;
+  boolean checktabs = true;
 
   /*
    * main
    */
   public static void main(String[] args)
   {
-    new AdminGUI();
+    new AdminGUI(defaultdest);
     
   }
 
-  private AdminGUI()
+  private AdminGUI(String path)
   {
+	  destination = path;
 	  adminFrame = new JFrame("GutenSearch");
 	  adminFrame.setSize(800, 400);
 	  adminFrame.setLayout(new BorderLayout());
@@ -150,6 +152,7 @@ public void actionPerformed(ActionEvent e) {
 		}
 		else
 		{
+			adminFrame.dispose();
 		editGUI();
 		}
 	}else if(command.equals("Continue to Search"))
@@ -161,7 +164,8 @@ public void actionPerformed(ActionEvent e) {
 		}
 		else
 		{
-			searchGUI();			
+			adminFrame.dispose();
+			searchGUI();				
 		}
 	}
 	
@@ -232,7 +236,7 @@ public void chooseDir(){
 public void editGUI()
 {
 
-	adminFrame.setVisible(false);
+	//adminFrame.setVisible(false);
 	
 	final JFrame editFrame = new JFrame("Edit a Source");
 	  editFrame.setSize(800, 400);
@@ -344,7 +348,9 @@ public void editGUI()
 	    						}
 	    						fw.close();
 	    						editFrame.setVisible(false);
-	    						adminFrame.setVisible(true);
+	    						editFrame.dispose();
+	    						new AdminGUI(destination);
+	    						//adminFrame.setVisible(true);
 	    			    		JOptionPane.showMessageDialog(adminFrame, "Choose directory before beginning.\n  The directory chosen will be the place where the text files are held.\n  Afterwards, you may upload a selected file to that folder, as well as edit the files in the folder.", "Help", JOptionPane.PLAIN_MESSAGE);
 
 	    					} catch (IOException e1) {
@@ -370,8 +376,10 @@ public void editGUI()
 	    		{
 	    			public void actionPerformed(ActionEvent e)
 	    			{
-	    				editFrame.setVisible(false);
-	    				adminFrame.setVisible(true);
+	    				//editFrame.setVisible(false);
+	    				editFrame.dispose();
+	    				new AdminGUI(destination);
+	    				//adminFrame.setVisible(true);
 	    			}
 	    		});
 	    editFrame.add(bg, BorderLayout.SOUTH);
@@ -383,7 +391,7 @@ public void editGUI()
 
 public void searchGUI()
 {
-	adminFrame.setVisible(false);
+	//adminFrame.setVisible(false);
 	final JFrame searchFrame = new JFrame("Search Books");
 		searchFrame.setLayout(new BorderLayout());
 		  searchFrame.setSize(800, 800);
@@ -443,8 +451,10 @@ public void searchGUI()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				searchFrame.setVisible(false);
-				adminFrame.setVisible(true);
+				//searchFrame.setVisible(false);
+				//adminFrame.setVisible(true);
+				searchFrame.dispose();
+				new AdminGUI(destination);
 			}
 		});
 	    file.add(back);
@@ -500,10 +510,10 @@ public void searchGUI()
 					try {
 						fileScanner = new Scanner(jfc.getSelectedFile());
 		    	    	while (fileScanner.hasNextLine()){
-			    	    	   str += fileScanner.nextLine();
+			    	    	   str += fileScanner.nextLine() + "\n";
 			    	    	}	    	   
-			    	      	JOptionPane.showMessageDialog(searchFrame, str, "Search Results History", JOptionPane.PLAIN_MESSAGE);
-
+			    	      	//JOptionPane.showMessageDialog(searchFrame, str, "Search Results History", JOptionPane.PLAIN_MESSAGE);
+		    	    		resultText.setText(str);
 					} catch (FileNotFoundException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -545,10 +555,14 @@ public void searchGUI()
 	    resultPanel.add(scrollPane, BorderLayout.CENTER);
 	    
 	    //add tabs
-	    tabPane.addTab("Result 1", resultPanel);	
-	    tabPane.addTab("Result 2", resultPanel2);
-	    tabPane.addTab("Result 3", resultPanel3);
-	    tabPane.addTab("Result 4", resultPanel4);
+	    if(checktabs)
+	    {
+		    tabPane.addTab("Result 1", resultPanel);	
+		    tabPane.addTab("Result 2", resultPanel2);
+		    tabPane.addTab("Result 3", resultPanel3);
+		    tabPane.addTab("Result 4", resultPanel4);
+		    checktabs = false;
+	    }
 	    
 		searchFrame.setVisible(true);
 
