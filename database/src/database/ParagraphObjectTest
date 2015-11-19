@@ -4,101 +4,128 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+public class ParagraphObjectTest
+{
 
-public class ParagraphObjectTest {
+  @Test
+  public void testEditTitle()
+  {
+    String paragraph1 = "All tests should pass.";
+    String title1 = "Testing God";
+    String author1 = "Charles Tester";
+    int ord1 = 2;
 
+    ParagraphObject testParagraph = new ParagraphObject(paragraph1, title1, author1, ord1, 0);
 
-    @Test
-    public void testEditTitle() {
-        String paragraph1 = "All tests should pass.";
-        String title1 = "Testing God";
-        String author1 = "Charles Tester";
-        int ord1 = 2;
+    testParagraph.editTitle("Always Test");
 
-        ParagraphObject testParagraph = new ParagraphObject(paragraph1, title1, author1, ord1, 0);
+    assertEquals("Always Test", testParagraph.getTitle());
+    
+  }
 
-        testParagraph.editTitle("Always Test");
+  @Test
+  public void testGetTitle()
+  {
+    String paragraph1 = "All tests should pass.";
+    String title1 = "Testing God";
+    String author1 = "Charles Tester";
+    int ord1 = 2;
 
-        assertEquals("Always Test", testParagraph.getTitle());
+    ParagraphObject testParagraph = new ParagraphObject(paragraph1, title1, author1, ord1, 0);
 
-    }
+    assertEquals(title1, testParagraph.getTitle());
+  }
 
-    @Test
-    public void testGetTitle() {
-        String paragraph1 = "All tests should pass.";
-        String title1 = "Testing God";
-        String author1 = "Charles Tester";
-        int ord1 = 2;
+  @Test
+  public void testEditAuthor()
+  {
+    String paragraph1 = "All tests should pass.";
+    String title1 = "Testing God";
+    String author1 = "Charles Tester";
+    int ord1 = 2;
 
-        ParagraphObject testParagraph = new ParagraphObject(paragraph1, title1, author1, ord1, 0);
+    ParagraphObject testParagraph = new ParagraphObject(paragraph1, title1, author1, ord1, 0);
 
-        assertEquals(title1, testParagraph.getTitle());
-    }
+    testParagraph.editAuthor("Elizabeth Exam");
 
-    @Test
-    public void testGetAuthor() {
-        String paragraph1 = "All tests should pass.";
-        String title1 = "Testing God";
-        String author1 = "Charles Tester";
-        int ord1 = 2;
+    assertEquals("Elizabeth Exam", testParagraph.getAuthor());
+  }
 
-        ParagraphObject testParagraph = new ParagraphObject(paragraph1, title1, author1, ord1, 0);
+  @Test
+  public void testGetAuthor()
+  {
+    String paragraph1 = "All tests should pass.";
+    String title1 = "Testing God";
+    String author1 = "Charles Tester";
+    int ord1 = 2;
 
-        assertEquals(author1, testParagraph.getAuthor());
-    }
+    ParagraphObject testParagraph = new ParagraphObject(paragraph1, title1, author1, ord1, 0);
 
-    @Test
-    public void testGetOrdinal() {
-        String paragraph1 = "All tests should pass.";
-        String title1 = "Testing God";
-        String author1 = "Charles Tester";
-        int ord1 = 2;
+    assertEquals(author1, testParagraph.getAuthor());
+  }
 
-        ParagraphObject testParagraph = new ParagraphObject(paragraph1, title1, author1, ord1, 0);
+  @Test
+  public void testGetOrdinal()
+  {
+    String paragraph1 = "All tests should pass.";
+    String title1 = "Testing God";
+    String author1 = "Charles Tester";
+    int ord1 = 2;
 
-        assertEquals(ord1, testParagraph.getOrdinal());
-    }
+    ParagraphObject testParagraph = new ParagraphObject(paragraph1, title1, author1, ord1, 0);
 
-    @Test
-    public void testGetPar() {
-        String paragraph1 = "All tests should pass.";
-        String title1 = "Testing God";
-        String author1 = "Charles Tester";
-        int ord1 = 2;
+    assertEquals(ord1, testParagraph.getOrdinal());
+  }
 
-        ParagraphObject testParagraph = new ParagraphObject(paragraph1, title1, author1, ord1, 0);
+  @Test
+  public void testGetPar()
+  {
+    String paragraph1 = "All tests should pass.";
+    String title1 = "Testing God";
+    String author1 = "Charles Tester";
+    int ord1 = 2;
 
-        assertEquals(paragraph1, testParagraph.getPar());
-    }
+    ParagraphObject testParagraph = new ParagraphObject(paragraph1, title1, author1, ord1, 0);
 
-    @Test
-    public void testToString() {
-        String paragraph1 = "All tests should pass.";
-        String title1 = "Testing God";
-        String author1 = "Charles Tester";
-        int ord1 = 2;
-        String parTitle = "Title: " + title1 + "\nAuthor: " + author1 + "\nOrdinal: " + ord1 +
-                "\n" + paragraph1 + "\n\n";
+    assertEquals(paragraph1, testParagraph.getPar());
+  }
 
-        ParagraphObject testParagraph = new ParagraphObject(paragraph1, title1, author1, ord1, 0);
+  @Test
+  public void testToString()
+  {
+    String paragraph1 = "All tests should pass.";
+    String title1 = "Testing God";
+    String author1 = "Charles Tester";
+    int ord1 = 2;
+    String parTitle = "Title: " + title1 + "\nAuthor: " + author1 + "\nOrdinal: " + ord1 + "\n"
+        + paragraph1 + "\n\n";
 
-        assertEquals(parTitle, testParagraph.toString());
+    ParagraphObject testParagraph = new ParagraphObject(paragraph1, title1, author1, ord1, 0);
 
-        paragraph1 = "All tests should pass!";
-        parTitle = "Title: " + title1 + "\nAuthor: " + author1 + "\nOrdinal: " + ord1 +
-                "\n" + paragraph1 + "\n\n";
+    assertEquals(parTitle, testParagraph.toString());
 
-        testParagraph = new ParagraphObject(paragraph1, title1, author1, ord1, 0);
+    paragraph1 = "All tests should pass!";
+    parTitle = "Title: " + title1 + "\nAuthor: " + author1 + "\nOrdinal: " + ord1 + "\n"
+        + paragraph1 + "\n\n";
 
-        assertEquals(parTitle, testParagraph.toString());
+    testParagraph = new ParagraphObject(paragraph1, title1, author1, ord1, 0);
 
-        paragraph1 = "All tests should pass?";
-        parTitle = "Title: " + title1 + "\nAuthor: " + author1 + "\nOrdinal: " + ord1 +
-                "\n" + paragraph1 + "\n\n";
+    assertEquals(parTitle, testParagraph.toString());
 
-        testParagraph = new ParagraphObject(paragraph1, title1, author1, ord1, 0);
+    paragraph1 = "All tests should pass?";
+    parTitle = "Title: " + title1 + "\nAuthor: " + author1 + "\nOrdinal: " + ord1 + "\n"
+        + paragraph1 + "\n\n";
 
-        assertEquals(parTitle, testParagraph.toString());
-    }
+    testParagraph = new ParagraphObject(paragraph1, title1, author1, ord1, 0);
 
+    assertEquals(parTitle, testParagraph.toString());
+
+    paragraph1 = "All tests should pass; do not fail tests";
+    parTitle = "Title: " + title1 + "\nAuthor: " + author1 + "\nOrdinal: " + ord1 + "\n"
+        + paragraph1 + "\n\n";
+
+    testParagraph = new ParagraphObject(paragraph1, title1, author1, ord1, 0);
+
+    assertEquals(parTitle, testParagraph.toString());
+  }
 }
