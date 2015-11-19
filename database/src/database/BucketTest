@@ -1,0 +1,41 @@
+package GutenSearch;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class BucketTest {
+
+    @Test
+    public void testToString() {
+        String key = "test";
+        String paragraph1 = "All tests should pass.";
+        String title1 = "Testing God";
+        String author1 = "Charles Tester";
+        int ord1 = 2;
+
+        Bucket testBucket = new Bucket(key);
+        ParagraphObject testParagraph = new ParagraphObject(paragraph1, title1, author1, ord1, 0);
+        testBucket.addParObject(testParagraph);
+
+        String parTitle = "Title: " + title1 + "\nAuthor: " + author1 + "\nOrdinal: " + ord1 +
+            "\n" + paragraph1 + "\n\n";
+
+        assertEquals(parTitle, testBucket.toString());
+    }
+
+    @Test
+    public void testLength() {
+        String key = "test";
+        String paragraph1 = "All tests should pass.";
+        String title1 = "Testing God";
+        String author1 = "Charles Tester";
+        int ord1 = 2;
+
+        Bucket testBucket = new Bucket(key);
+        ParagraphObject testParagraph = new ParagraphObject(paragraph1, title1, author1, ord1, 0);
+        testBucket.addParObject(testParagraph);
+
+        assertEquals(1, testBucket.length());
+    }
+}
