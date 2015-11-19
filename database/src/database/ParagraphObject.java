@@ -1,5 +1,5 @@
 package GutenSearch;
-/*
+/**
  * ParagraphObject
  * A class that creates paragraph objects
  *
@@ -12,7 +12,7 @@ public class ParagraphObject {
   public String paragraph;
   public int arrindex;
 
-  /*
+  /**
    * A ParagraphObject constructor
    *
    * @param paragraph1 - the text of the paragraph
@@ -30,7 +30,7 @@ public class ParagraphObject {
     author = author1;
   }
 
-  /*
+  /**
    * A helper method to parse the paragraph
    *
    */
@@ -44,7 +44,7 @@ public class ParagraphObject {
     }
   }
 
-  /*
+  /**
    * A helper method to add text to Buckets
    *
    * @param key - the term(s) to be added
@@ -67,7 +67,7 @@ public class ParagraphObject {
     }
   }
 
-  /*
+  /**
    * A helper method to edit author
    *
    * @param authorname - the new authors name
@@ -77,7 +77,7 @@ public class ParagraphObject {
     author = authorname;
   }
 
-  /*
+  /**
    * A helper method to edit title
    *
    * @param titlename - the new title
@@ -87,7 +87,7 @@ public class ParagraphObject {
     title = titleName;
   }
 
-  /*
+  /**
    * A helper method to get title
    *
    */
@@ -96,7 +96,7 @@ public class ParagraphObject {
     return title;
   }
 
-  /*
+  /**
    * A helper method to get author
    *
    */
@@ -105,7 +105,7 @@ public class ParagraphObject {
     return author;
   }
 
-  /*
+  /**
    * A helper method to get the ordinal number
    *
    */
@@ -114,7 +114,7 @@ public class ParagraphObject {
     return ordinal;
   }
 
-  /*
+  /**
    * A helper method to get the text
    *
    */
@@ -123,7 +123,7 @@ public class ParagraphObject {
     return paragraph;
   }
 
-  /*
+  /**
    * A helper method to convert the ParagraphObject to string
    *
    * @return str the string representation of the ParagraphObject
