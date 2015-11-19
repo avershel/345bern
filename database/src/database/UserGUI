@@ -296,6 +296,10 @@ public void searchGUI()
 			}
 		});
 	    file.add(back);
+	    
+	    
+	    
+	    
 	   
 	    
 	    //Advanced Search button
