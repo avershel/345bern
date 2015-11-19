@@ -57,6 +57,17 @@ public class AdminGUI implements ActionListener
       JMenuBar menuBar = new JMenuBar();
       JMenu file = new JMenu("File");
       JMenu help = new JMenu("Help");
+	    JMenuItem helppage = new JMenuItem("Help Page");
+	    helppage.addActionListener(new ActionListener(){
+	    	public void actionPerformed(ActionEvent e){
+	    		//searchFrame.dispose();
+	    		String content = ("Before you begin using GutenSearch, you must select a directory.\nThis Directory should "
+	    				+ "be the location where your text files are held.\nNext, choose the files you wish to upload.  These files will be placed in the selected directory.\nEdit File will give you the option to edit a file in the chosen directory.\nYour search will search through the text files in the selected directory.\n");
+	    		JOptionPane.showMessageDialog(adminFrame, content, "Confirmation", JOptionPane.PLAIN_MESSAGE);
+
+	    	}
+	    });
+	    help.add(helppage);
       menuBar.add(file);
       menuBar.add(help);
 
@@ -244,7 +255,7 @@ public void editGUI()
 	  editFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	  
       JLabel titleLabel = new JLabel();
-      titleLabel.setText("Fill In All Fields To Edit File");
+      titleLabel.setText("Fill In ALL Fields To Edit File");
       titleLabel.setHorizontalAlignment(JLabel.CENTER);
       titleLabel.setVerticalAlignment(JLabel.CENTER);
       titleLabel.setFont(new Font("Serif", Font.PLAIN, 18));
@@ -445,6 +456,18 @@ public void searchGUI()
 	    
 	    JMenuBar bar = new JMenuBar();
 	    JMenu file = new JMenu("File");
+	    JMenu help = new JMenu("Help");
+	    JMenuItem helppage = new JMenuItem("Help Page");
+	    helppage.addActionListener(new ActionListener(){
+	    	public void actionPerformed(ActionEvent e){
+	    		//searchFrame.dispose();
+	    		String content = ("Enter specific words to search for in the text area, then press enter.\nGutenSearch will return listings of texts containing "
+	    				+ "the word(s) by listing their title, author, ordinal number, and the first sentence.\nYou may search for multiple words with an '&' which will return texts that contain each of the words.\nYou may search for multiple words with an '*' which will return texts that contain either of the words.\n");
+	    		JOptionPane.showMessageDialog(searchFrame, content, "Confirmation", JOptionPane.PLAIN_MESSAGE);
+
+	    	}
+	    });
+	    help.add(helppage);
 	    
 	    JMenuItem back = new JMenuItem("Go Back");
 	    back.addActionListener(new ActionListener()
@@ -494,6 +517,7 @@ public void searchGUI()
 	    	}
 	    });
 	    history.add(outputhist);
+	    
 	    JMenuItem load = new JMenuItem("Load Search History");
 	    load.addActionListener(new ActionListener(){
 	    	public void actionPerformed(ActionEvent e)
@@ -524,6 +548,7 @@ public void searchGUI()
 	    });
 	    history.add(load);
 	    bar.add(history);
+	    bar.add(help);
 	    topPanel.add(bar, BorderLayout.NORTH);
 	    
 
