@@ -133,7 +133,22 @@ public void actionPerformed(ActionEvent e) {
 		}
 		else
 		{
-		System.out.println("here in dir");
+			   JFileChooser chooser;
+			    chooser = new JFileChooser(); 
+			    chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+			    
+			    
+			    
+			    if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) { 
+			        File[] filesInDirectory = chooser.getSelectedFile().listFiles();
+;
+			        for(File file: filesInDirectory){
+			        	if(file.getName().charAt(0) != '.' ){	
+			        		uploadFile(file);
+			        	}
+			        }
+			    }
+
 		}
 	}else if(command.equals("Upload File"))
 	{
