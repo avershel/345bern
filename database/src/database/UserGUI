@@ -6,12 +6,14 @@ import java.io.*;
 import java.nio.file.Files;
 import java.util.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 import javax.swing.text.Highlighter.HighlightPainter;
-
 
 /*
  * userGUI
@@ -19,403 +21,660 @@ import javax.swing.text.Highlighter.HighlightPainter;
  *
  * @author group 7
  */
-public class UserGUI implements ActionListener
-{
+public class UserGUI implements ActionListener {
 
-  //ArrayList<JTextField> list = new ArrayList<JTextField>();
-  Database db = new Database();
-  String destination = "$HOME//Desktop";
-  static String defaultdest = "$HOME//Desktop";
+	// ArrayList<JTextField> list = new ArrayList<JTextField>();
+	Database db = new Database();
+	String destination = "$HOME//Desktop";
+	static String defaultdest = "$HOME//Desktop";
+	boolean advancedsearching;
 
-  JTabbedPane tabPane = new JTabbedPane();
-  JFrame userFrame;
-  boolean checktabs = true;
+	JTabbedPane tabPane = new JTabbedPane();
+	JFrame userFrame;
+	boolean checktabs = true;
 
-  /*
-   * main
-   */
-  public static void main(String[] args)
-  {
-	  new UserGUI(defaultdest);
-  }
-
-  public UserGUI(String path)
-  {
-	  destination = path;
-	  userFrame = new JFrame("GutenSearch");
-	  userFrame.setSize(800, 400);
-	  userFrame.setLayout(new BorderLayout());
-	  userFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	  
-      JLabel titleLabel = new JLabel();
-      titleLabel.setText("Welcome To GutenSearch!");
-      titleLabel.setHorizontalAlignment(JLabel.CENTER);
-      titleLabel.setVerticalAlignment(JLabel.CENTER);
-      titleLabel.setFont(new Font("Serif", Font.PLAIN, 18));
-
-      //Main menu
-      JMenuBar menuBar = new JMenuBar();
-      JMenu file = new JMenu("File");
-	    JMenu help = new JMenu("Help");
-	    
-      menuBar.add(file);
-      menuBar.add(help);
-
-      //File
-      JMenuItem chooseDir = new JMenuItem("Choose Directory");
-      chooseDir.addActionListener(this);
-      file.add(chooseDir);
-
-      JMenuItem helppage = new JMenuItem("Help Page");
-      helppage.addActionListener(new ActionListener(){
-	    	public void actionPerformed(ActionEvent e){
-
-	//    		System.out.println("help gui 1");
-//	    		userFrame.dispose();
-	    		String content = ("Before you begin using GutenSearch, you must select a directory.\nThis Directory should "
-	    				+ "be the location where your text files are held.\nYour search will search through the text files in the selected directory.\n");
-	    		JOptionPane.showMessageDialog(userFrame, content, "Confirmation", JOptionPane.PLAIN_MESSAGE);
-
-	    	}
-	    });      
-      help.add(helppage);
-      
-      //Help
-      
-
-      //North
-      JPanel pan = new JPanel();
-      pan.setLayout(new GridLayout(2,1));
-      pan.add(menuBar);
-      pan.add(titleLabel);
-      userFrame.add(pan, BorderLayout.NORTH);
-      
-      //Center
-      //ImageIcon image = new ImageIcon("gslogo.png");
-      //JLabel label = new JLabel("check", image, JLabel.CENTER);
-      //userFrame.add(label);
-      
-      //South
-      JPanel span = new JPanel();
-      span.setLayout(new FlowLayout());
-      JButton search = new JButton("Continue to Search");
-      span.add(search);
-      search.addActionListener(this);
-      userFrame.add(span, BorderLayout.SOUTH);
-
-      userFrame.setVisible(true);
-      
-  }
-
-@Override
-public void actionPerformed(ActionEvent e) {
-	String command = e.getActionCommand();
-	
-	System.out.println(command);
-	if(command.equals("Choose Directory"))
-	{
-		chooseDir();
-		
-	}else if(command.equals("Continue to Search"))
-	{
-		if(destination.equals(defaultdest))
-		{
-	      	JOptionPane.showMessageDialog(userFrame, "You must choose the directory where your files are held in order to search.\nTo choose your directory, go to File->Choose Directory.", "Choose Directory First!", JOptionPane.ERROR_MESSAGE);
-
-		}
-		else
-		{
-			userFrame.dispose();
-			searchGUI();			
-		}
-	}else if(command.equals("Advanced Search"))
-	{
-		//Do advanced search stuffAll Terms Searched
+	/*
+	 * main
+	 */
+	public static void main(String[] args) throws IOException {
+		new UserGUI(defaultdest);
 	}
-	
-}
 
-public void chooseDir(){
-	JFileChooser jfc = new JFileChooser();
-	jfc.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY);
+	public UserGUI(String path) throws IOException {
+		destination = path;
+		userFrame = new JFrame("GutenSearch");
+		userFrame.setSize(800, 700);
+		userFrame.setLayout(new BorderLayout());
+		userFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-	int retval = jfc.showOpenDialog(userFrame);
-	
-	if (retval == JFileChooser.APPROVE_OPTION)
-	{
-		destination = jfc.getSelectedFile().toString();
-    	JOptionPane.showMessageDialog(userFrame, "Directory Selected", "Confirmation", JOptionPane.PLAIN_MESSAGE);
-	}
-}
+		JLabel titleLabel = new JLabel();
+		titleLabel.setText("Welcome To GutenSearch!");
+		titleLabel.setHorizontalAlignment(JLabel.CENTER);
+		titleLabel.setVerticalAlignment(JLabel.CENTER);
+		titleLabel.setFont(new Font("Serif", Font.PLAIN, 18));
 
-public void searchGUI()
-{
-	
-	//userFrame.setVisible(false);
-	final JFrame searchFrame = new JFrame("Search Books");
-		searchFrame.setLayout(new BorderLayout());
-		  searchFrame.setSize(800, 800);
-		  
-		  searchFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		  
-		  
-	
-		  File folder = new File(destination);
-		    File[] listOfFiles = folder.listFiles();
-		 
-		    for (int i = 0; i < listOfFiles.length; i++) {
-		      File file = listOfFiles[i];
-		      if (file.isFile() ) {
-		        try
-		        {
-		          db.addTxtFiles(file);
-		        }
-		        catch (FileNotFoundException e1)
-		        {
-		          // TODO Auto-generated catch block
-		          e1.printStackTrace();
-		        }
-		        catch (IOException e1)
-		        {
-		          // TODO Auto-generated catch block
-		          e1.printStackTrace();
-		          //String destination = "$HOME//Desktop";
-		          //String defaultdest = "$HOME//Desktop";
-		        }
-		        //String content = FileUtils.readFileToString(file);
-		        /* do somthing with content */
-		      }
-		    }
-		 
-		//panels for search section
-	    JPanel searchLabelPanel = new JPanel(new FlowLayout());
-	    JPanel searchInputPanel = new JPanel(new FlowLayout());
-	    JLabel searchLabel = new JLabel("Enter Search Terms");
-	    
-	    //text areas for search field and results
-	    final JTextField searchText = new JTextField(25);
-	    final JTextArea resultText = new JTextArea();
-	    resultText.setLineWrap(true);
-	    resultText.setEditable(false);
-	    
-	    JPanel topPanel = new JPanel();
-	    topPanel.setLayout(new BorderLayout());
-	    //add details to panels
-	    searchLabelPanel.add(searchLabel);
-	    searchInputPanel.add(searchText);
-	    topPanel.add(searchInputPanel, BorderLayout.CENTER);
-	    
-	    JMenuBar bar = new JMenuBar();
-	    JMenu file = new JMenu("File");
-	    JMenu history = new JMenu("History");
-	    JMenu help = new JMenu("Help");
-	    JMenuItem helppage = new JMenuItem("Help Page");
-	    helppage.addActionListener(new ActionListener(){
-	    	public void actionPerformed(ActionEvent e){
-	    		//searchFrame.dispose();
-	    		String content = ("Enter specific words to search for in the text area, then press enter.\nGutenSearch will return listings of texts containing "
-	    				+ "the word(s) by listing their title, author, ordinal number, and the first sentence.\nYou may search for multiple words with an '&' which will return texts that contain each of the words.\nYou may search for multiple words with an '*' which will return texts that contain either of the words.\n");
-	    		JOptionPane.showMessageDialog(userFrame, content, "Confirmation", JOptionPane.PLAIN_MESSAGE);
+		// Main menu
+		JMenuBar menuBar = new JMenuBar();
+		JMenu file = new JMenu("File");
+		JMenu help = new JMenu("Help");
 
-	    	}
-	    });
-	    help.add(helppage);
-	    //history
-	    JMenuItem terms = new JMenuItem("All Terms Searched");
-	    terms.addActionListener(new ActionListener(){
-	    	public void actionPerformed(ActionEvent e)
-	    	{
-		      	JOptionPane.showMessageDialog(searchFrame, db.history.keySet().toString(), "Search Histroy", JOptionPane.PLAIN_MESSAGE);
+		menuBar.add(file);
+		menuBar.add(help);
 
-	    	}
-	    });
-	    history.add(terms);
-	    JMenuItem outputhist = new JMenuItem("Output Search Results");
-	    outputhist.addActionListener(new ActionListener(){
-	    	public void actionPerformed(ActionEvent e)
-	    	{
-		      	//TO-DO
-	    	    JFileChooser jfc = new JFileChooser();
-	    	    int retval = jfc.showOpenDialog(searchFrame);
+		// File
+		JMenuItem chooseDir = new JMenuItem("Choose Directory");
+		chooseDir.addActionListener(this);
+		file.add(chooseDir);
 
-	    	    if (retval == JFileChooser.APPROVE_OPTION)
-	    	    {
-	    	    	//uploadFile(jfc.getSelectedFile());
-	    	      	try {
-						PrintWriter out = new PrintWriter(jfc.getSelectedFile().toString());
-						out.println(db.getHistory());
-		    	      	JOptionPane.showMessageDialog(searchFrame, "History outputted successfully.", "Confirmation", JOptionPane.PLAIN_MESSAGE);
+		JMenuItem helppage = new JMenuItem("Help Page");
+		helppage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 
-					} catch (FileNotFoundException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-	    	    }
-	    	}
-	    });
-	    history.add(outputhist);
-	    JMenuItem load = new JMenuItem("Load Search History");
-	    load.addActionListener(new ActionListener(){
-	    	public void actionPerformed(ActionEvent e)
-	    	{
-		      	//TO-DO
-	    	    JFileChooser jfc = new JFileChooser();
-	    	    int retval = jfc.showOpenDialog(searchFrame);
+				// System.out.println("help gui 1");
+				// userFrame.dispose();
+				String content = ("Before you begin using GutenSearch, you must select a directory.\nThis Directory should "
+						+ "be the location where your text files are held.\nYour search will search through the text files in the selected directory.\n"
+						+ "The Illustrator template for this logo was supplied by http://all-free-download.com/free-vector/book-ai.html");
+				JOptionPane.showMessageDialog(userFrame, content, "Confirmation", JOptionPane.PLAIN_MESSAGE);
 
-	    	    if (retval == JFileChooser.APPROVE_OPTION)
-	    	    {
-	    	    	String str = "";
-	    	    	//uploadFile(jfc.getSelectedFile());
-	    	    	Scanner fileScanner;
-					try {
-						fileScanner = new Scanner(jfc.getSelectedFile());
-		    	    	while (fileScanner.hasNextLine()){
-			    	    	   str += fileScanner.nextLine() + "\n";
-			    	    	}	    	   
-			    	      	//JOptionPane.showMessageDialog(searchFrame, str, "Search Results History", JOptionPane.PLAIN_MESSAGE);
-		    	    	    resultText.setText(str);
-					} catch (FileNotFoundException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-	
-	    	    }
-	    	}
-	    });
-	    history.add(load);
-
-	    JMenuItem back = new JMenuItem("Go Back");
-	    back.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				//searchFrame.setVisible(false);
-				searchFrame.dispose();
-				new UserGUI(destination);
-				//userFrame.setVisible(true);
 			}
 		});
-	    file.add(back);
-	    
-	    
-	    
-	    
-	   
-	    
-	    //Advanced Search button
-	    JMenuItem advancedSearch = new JMenuItem("Advanced Search");
-	    advancedSearch.addActionListener(this);
-	    
-	    file.add(advancedSearch);
-	    
-	    
-	    bar.add(file);
-	    bar.add(history);
-	    bar.add(help);
-	    
-	    topPanel.add(bar, BorderLayout.NORTH);
-	    
+		help.add(helppage);
 
-	    //panels for result section
-	    JPanel resultLabelPanel = new JPanel(new FlowLayout());
-	    final JLabel resultLabel = new JLabel("Results");
-	    JPanel resultPanel = new JPanel(new BorderLayout());
-	    JScrollPane scrollPane = new JScrollPane(resultText);
+		// Help
 
-	    
-	    //panels for search results
-	    resultLabelPanel.add(resultLabel);
-	    resultPanel.add(resultLabelPanel, BorderLayout.NORTH);
-	    resultPanel.add(scrollPane, BorderLayout.CENTER);
-	    
-	    JPanel resultPanel2 = new JPanel(new FlowLayout());
-	    resultPanel2.add(resultLabelPanel, BorderLayout.NORTH);
-	    resultPanel2.add(scrollPane, BorderLayout.CENTER);
-	    
-	    JPanel resultPanel3 = new JPanel(new FlowLayout());
-	    resultPanel3.add(resultLabelPanel, BorderLayout.NORTH);
-	    resultPanel3.add(scrollPane, BorderLayout.CENTER);
-	    
-	    JPanel resultPanel4 = new JPanel(new FlowLayout());
-	    resultPanel4.add(resultLabelPanel, BorderLayout.NORTH);
-	    resultPanel4.add(scrollPane, BorderLayout.CENTER);
-	    
-	    resultPanel.add(resultLabelPanel, BorderLayout.NORTH);
-	    resultPanel.add(scrollPane, BorderLayout.CENTER);
-	    
-	    //add tabs
-	    if(checktabs)
-	    {
-		    tabPane.addTab("Result 1", resultPanel);	
-		    tabPane.addTab("Result 2", resultPanel2);
-		    tabPane.addTab("Result 3", resultPanel3);
-		    tabPane.addTab("Result 4", resultPanel4);
-		    checktabs = false;
-	    }
-	    
+		// North
+		JPanel pan = new JPanel();
+		pan.setLayout(new GridLayout(2, 1));
+		pan.add(menuBar);
+		pan.add(titleLabel);
+		userFrame.add(pan, BorderLayout.NORTH);
+
+		// Center
+		InputStream is = getClass().getResourceAsStream("logo.png");
+		ImageIcon image = new ImageIcon(ImageIO.read(is));
+		JLabel label = new JLabel(image, JLabel.CENTER);
+		label.setIcon(image);
+		userFrame.add(label);
+
+		// South
+		JPanel span = new JPanel();
+		span.setLayout(new FlowLayout());
+		JButton search = new JButton("Continue to Search");
+		span.add(search);
+		search.addActionListener(this);
+		userFrame.add(span, BorderLayout.SOUTH);
+
+		userFrame.setVisible(true);
+
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		String command = e.getActionCommand();
+
+		System.out.println(command);
+		if (command.equals("Choose Directory")) {
+			chooseDir();
+
+		} else if (command.equals("Continue to Search")) {
+			if (destination.equals(defaultdest)) {
+				JOptionPane.showMessageDialog(userFrame,
+						"You must choose the directory where your files are held in order to search.\nTo choose your directory, go to File->Choose Directory.",
+						"Choose Directory First!", JOptionPane.ERROR_MESSAGE);
+
+			} else {
+				userFrame.dispose();
+				searchGUI();
+			}
+		} else if (command.equals("Advanced Search")) {
+			advancedsearching = true;
+		}
+
+	}
+
+	public void chooseDir() {
+		JFileChooser jfc = new JFileChooser();
+		jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+		int retval = jfc.showOpenDialog(userFrame);
+
+		if (retval == JFileChooser.APPROVE_OPTION) {
+			destination = jfc.getSelectedFile().toString();
+			JOptionPane.showMessageDialog(userFrame, "Directory Selected", "Confirmation", JOptionPane.PLAIN_MESSAGE);
+		}
+	}
+
+	public void searchGUI() {
+		// userFrame.setVisible(false);
+		final JFrame searchFrame = new JFrame("Search Books");
+		searchFrame.setLayout(new BorderLayout());
+		searchFrame.setSize(800, 800);
+
+		searchFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		File folder = new File(destination);
+		File[] listOfFiles = folder.listFiles();
+
+		for (int i = 0; i < listOfFiles.length; i++) {
+			File file = listOfFiles[i];
+			if (file.isFile()) {
+				try {
+					db.addTxtFiles(file);
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+					// String destination = "$HOME//Desktop";
+					// String defaultdest = "$HOME//Desktop";
+				}
+				// String content = FileUtils.readFileToString(file);
+				/* do somthing with content */
+			}
+		}
+
+		// panels for search section
+		JPanel searchLabelPanel = new JPanel(new FlowLayout());
+		JPanel searchInputPanel = new JPanel(new FlowLayout());
+		JLabel searchLabel = new JLabel("Enter Search Terms");
+		// text areas for search field and results
+		final JTextField searchText = new JTextField(25);
+		final JTextArea resultText = new JTextArea();
+		resultText.setLineWrap(true);
+		resultText.setEditable(false);
+
+		final JTextField searchText2 = new JTextField(25);
+		final JTextArea resultText2 = new JTextArea();
+		resultText2.setLineWrap(true);
+		resultText2.setEditable(false);
+		searchText2.setVisible(false);
+
+		final JTextField searchText3 = new JTextField(25);
+		final JTextArea resultText3 = new JTextArea();
+		resultText3.setLineWrap(true);
+		resultText3.setEditable(false);
+		searchText3.setVisible(false);
+
+		final JTextField searchText4 = new JTextField(25);
+		final JTextArea resultText4 = new JTextArea();
+		resultText4.setLineWrap(true);
+		resultText4.setEditable(false);
+		searchText4.setVisible(false);
+
+		final JPanel topPanel = new JPanel();
+		topPanel.setLayout(new BorderLayout());
+		// add details to panels
+		searchLabelPanel.add(searchLabel);
+
+		searchInputPanel.add(searchText);
+		searchInputPanel.add(searchText2);
+		searchInputPanel.add(searchText3);
+		searchInputPanel.add(searchText4);
+
+		topPanel.add(searchInputPanel, BorderLayout.CENTER);
+
+		JMenuBar bar = new JMenuBar();
+		JMenu file = new JMenu("File");
+		JMenu history = new JMenu("History");
+		JMenu help = new JMenu("Help");
+		JMenuItem helppage = new JMenuItem("Help Page");
+		helppage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String content = ("Enter specific words to search for in the text area, then press enter.\nGutenSearch will return listings of texts containing "
+						+ "the word(s) by listing their title, author, ordinal number, and the first sentence.\nYou may search for multiple words with an '&' which "
+						+ "will return texts that contain each of the words.\nYou may search for multiple words with an '|' which will return texts that contain "
+						+ "either of the words.\n"
+						+ "You may use '?' to search for a wildcard character.\n"
+						+ "Click the Advanced Search option in the File menu for advanced options.\n"
+						+ "You may select the AND or OR advanced buttons to add these symbols in instead.\n"
+						+ "Select the exact phrases advanced checkbox to search for the exact match of the search terms.");
+				JOptionPane.showMessageDialog(userFrame, content, "Confirmation", JOptionPane.PLAIN_MESSAGE);
+
+			}
+		});
+		help.add(helppage);
+		// history
+		JMenuItem terms = new JMenuItem("All Terms Searched");
+		terms.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(searchFrame, db.history.keySet().toString(), "Search Histroy",
+						JOptionPane.PLAIN_MESSAGE);
+
+			}
+		});
+		history.add(terms);
+		JMenuItem outputhist = new JMenuItem("Output Search Results");
+		outputhist.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TO-DO
+				JFileChooser jfc = new JFileChooser();
+				int retval = jfc.showOpenDialog(searchFrame);
+
+				if (retval == JFileChooser.APPROVE_OPTION) {
+					// uploadFile(jfc.getSelectedFile());
+					try {
+						PrintWriter out = new PrintWriter(jfc.getSelectedFile().toString());
+						out.println(db.getHistory());
+						JOptionPane.showMessageDialog(searchFrame, "History outputted successfully.", "Confirmation",
+								JOptionPane.PLAIN_MESSAGE);
+
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
+		history.add(outputhist);
+		JMenuItem load = new JMenuItem("Load Search History");
+		load.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TO-DO
+				JFileChooser jfc = new JFileChooser();
+				int retval = jfc.showOpenDialog(searchFrame);
+
+				if (retval == JFileChooser.APPROVE_OPTION) {
+					String str = "";
+					// uploadFile(jfc.getSelectedFile());
+					Scanner fileScanner;
+					try {
+						fileScanner = new Scanner(jfc.getSelectedFile());
+						while (fileScanner.hasNextLine()) {
+							str += fileScanner.nextLine() + "\n";
+						}
+						// JOptionPane.showMessageDialog(searchFrame, str,
+						// "Search Results History", JOptionPane.PLAIN_MESSAGE);
+						resultText.setText(str);
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
+				}
+			}
+		});
+		history.add(load);
+
+		JMenuItem back = new JMenuItem("Go Back");
+		back.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// searchFrame.setVisible(false);
+				searchFrame.dispose();
+				try {
+					new UserGUI(destination);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				// userFrame.setVisible(true);
+			}
+		});
+		file.add(back);
+
+		// Advanced Search button
+		JMenuItem advancedSearch = new JMenuItem("Advanced Search");
+		advancedSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// button for AND function
+				JButton andbutton = new JButton("AND");
+				andbutton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						searchText.setText(searchText.getText() + "&");
+					}
+				});
+
+				JPanel andPanel = new JPanel(new FlowLayout());
+				andPanel.add(andbutton);
+
+				// button for OR function
+				JButton orbutton = new JButton("OR");
+
+				orbutton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent l) {
+						searchText.setText(searchText.getText() + "|");
+					}
+				});
+				andPanel.add(orbutton);
+
+				// exactphrases check box inserts
+				final JCheckBox exactButton = new JCheckBox("Exact Phrases");
+				exactButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent l) {
+						if (exactButton.isSelected()) {
+							advancedsearching = true;
+						} else {
+							advancedsearching = false;
+						}
+					}
+				});
+				andPanel.add(exactButton);
+
+				topPanel.add(andPanel, BorderLayout.EAST);
+				// JCheckBox wildcardButton = new JCheckBox("All endings");
+
+				topPanel.revalidate();
+				topPanel.repaint();
+			}
+		});
+
+		file.add(advancedSearch);
+
+		bar.add(file);
+		bar.add(history);
+		bar.add(help);
+
+		topPanel.add(bar, BorderLayout.NORTH);
+
+		// panels for result section
+		JPanel resultLabelPanel = new JPanel(new FlowLayout());
+		final JLabel resultLabel = new JLabel("Results");
+		JPanel resultPanel = new JPanel(new BorderLayout());
+		JScrollPane scrollPane = new JScrollPane(resultText);
+
+		// panels for result section
+		JPanel resultLabelPanel2 = new JPanel(new FlowLayout());
+		final JLabel resultLabel2 = new JLabel("Results");
+		JPanel resultPanel2 = new JPanel(new BorderLayout());
+		JScrollPane scrollPane2 = new JScrollPane(resultText2);
+
+		// panels for result section
+		JPanel resultLabelPanel3 = new JPanel(new FlowLayout());
+		final JLabel resultLabel3 = new JLabel("Results");
+		JPanel resultPanel3 = new JPanel(new BorderLayout());
+		JScrollPane scrollPane3 = new JScrollPane(resultText3);
+
+		// panels for result section
+		JPanel resultLabelPanel4 = new JPanel(new FlowLayout());
+		final JLabel resultLabel4 = new JLabel("Results");
+		JPanel resultPanel4 = new JPanel(new BorderLayout());
+		JScrollPane scrollPane4 = new JScrollPane(resultText4);
+
+		// panels for search results
+		resultLabelPanel.add(resultLabel);
+		resultPanel.add(resultLabelPanel, BorderLayout.NORTH);
+		resultPanel.add(scrollPane, BorderLayout.CENTER);
+
+		resultLabelPanel2.add(resultLabel2);
+		resultPanel2.add(resultLabelPanel2, BorderLayout.NORTH);
+		resultPanel2.add(scrollPane2, BorderLayout.CENTER);
+
+		resultLabelPanel3.add(resultLabel3);
+		resultPanel3.add(resultLabelPanel3, BorderLayout.NORTH);
+		resultPanel3.add(scrollPane3, BorderLayout.CENTER);
+
+		resultLabelPanel4.add(resultLabel4);
+		resultPanel4.add(resultLabelPanel4, BorderLayout.NORTH);
+		resultPanel4.add(scrollPane4, BorderLayout.CENTER);
+
+		tabPane.addTab("Result 1", resultPanel);
+		tabPane.addTab("Result 2", resultPanel2);
+		tabPane.addTab("Result 3", resultPanel3);
+		tabPane.addTab("Result 4", resultPanel4);
+
+		tabPane.addTab("Result 1", resultPanel);
+		tabPane.addTab("Result 2", resultPanel2);
+		tabPane.addTab("Result 3", resultPanel3);
+		tabPane.addTab("Result 4", resultPanel4);
+
+		ChangeListener changeListener = new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				JTabbedPane sourceTabbedPane = (JTabbedPane) e.getSource();
+				int index = sourceTabbedPane.getSelectedIndex();
+
+				if (index == 0) {
+					searchText.setVisible(true);
+					searchText2.setVisible(false);
+					searchText3.setVisible(false);
+					searchText4.setVisible(false);
+				} else if (index == 1) {
+					searchText.setVisible(false);
+					searchText2.setVisible(true);
+					searchText3.setVisible(false);
+					searchText4.setVisible(false);
+				} else if (index == 2) {
+					searchText.setVisible(false);
+					searchText2.setVisible(false);
+					searchText3.setVisible(true);
+					searchText4.setVisible(false);
+				} else if (index == 3) {
+					searchText.setVisible(false);
+					searchText2.setVisible(false);
+					searchText3.setVisible(false);
+					searchText4.setVisible(true);
+				}
+			}
+		};
+
+		tabPane.addChangeListener(changeListener);
+
 		searchFrame.setVisible(true);
 
-	    
-	    //action listener for search button
-	    searchText.addActionListener(new ActionListener(){
-	      public void actionPerformed(ActionEvent e){
-	    	  long startTime = System.currentTimeMillis();
-	    	  long elapsedTime = 0L;
-	    	  String result = db.search(searchText.getText());
-	    	elapsedTime = (new Date()).getTime() - startTime;
-	    	double seconds = elapsedTime/ 1000.0;
-	    	resultLabel.setText("Results:(Searched " + Database.textcount + " Texts in "+ seconds + " Seconds)");
-	    	  if(result.equals("QUERY TERM NOT FOUND"))
-	    	  {
-	    		  resultText.setText("");
-	    		  JOptionPane.showMessageDialog(searchFrame, result, "Error", JOptionPane.ERROR_MESSAGE);
-	    	  }
-	    	  else
-	    	  {
-	    		  //resultText.setText("");
-	    		  resultText.setText(db.search(searchText.getText()));
-	    	      int index = resultText.getText().indexOf(searchText.getText());
-	    	      int len = searchText.getText().length();
-	    	      Highlighter highlighter = resultText.getHighlighter();
-	    	      HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
-	    	      while ( index >= 0 ) {
-	    	         try
-	    	         {
-	    	             highlighter.addHighlight(index, index+len, painter);
-	    	         }
-	    	         catch ( BadLocationException e1 )
-	    	         {
-	    	             // TODO Auto-generated catch block
-	    	             e1.printStackTrace();
-	    	         }
-	    	         index = resultText.getText().indexOf(searchText.getText(), index+len);
-	    	        }
+		// action listener for search button in tab 1
+		searchText.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				long startTime = System.currentTimeMillis();
+				long elapsedTime = 0L;
+				String result = "";
+				if(advancedsearching)
+				{
+					result = db.AdvancedSearch(searchText.getText());
+				}
+				else
+				{
+					result = db.search(searchText.getText());
+				}
+				elapsedTime = (new Date()).getTime() - startTime;
+				double seconds = elapsedTime / 1000.0;
+				resultLabel.setText("Results:(Searched " + Database.textcount + " Texts in " + seconds + " Seconds)");
 
-	    	  }
-	      }});
+				if (result.equals("QUERY TERM NOT FOUND")) {
+					resultText.setText("");
+					JOptionPane.showMessageDialog(searchFrame, result, "Error", JOptionPane.ERROR_MESSAGE);
+				} else {
+					resultText.setText(result);
+					int index = resultText.getText().indexOf(searchText.getText());
+					int len = searchText.getText().length();
+					Highlighter highlighter = resultText.getHighlighter();
+					HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
+					while (index >= 0) {
+						try {
+							highlighter.addHighlight(index, index + len, painter);
+						} catch (BadLocationException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						index = resultText.getText().indexOf(searchText.getText(), index + len);
+					}
+				}
+			}
+		});
 
-	    //button for clearing the search
-	    JButton clearSearch = new JButton("Clear Search");
-	    clearSearch.addActionListener(new ActionListener(){
-	      public void actionPerformed(ActionEvent e){
-	        searchText.setText("");
-	        resultText.setText("");
-	      }});
-	    
-	    //panel for the search button
-	    JPanel clearPanel = new JPanel(new FlowLayout());
-	    clearPanel.add(clearSearch);
-	    resultPanel.add(clearPanel, BorderLayout.SOUTH);
-	    
-	    //add components to main panel
-	    JPanel textBoxPanel = new JPanel(new BorderLayout());
-	    textBoxPanel.add(topPanel, BorderLayout.NORTH);
-	    textBoxPanel.add(tabPane, BorderLayout.CENTER);
-	    searchFrame.add(textBoxPanel, BorderLayout.CENTER);
-	    searchFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		
-											  
-	
-}
+		// action listener for search button in tab 2
+		searchText2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				long startTime = System.currentTimeMillis();
+				long elapsedTime = 0L;
+				String result = "";
+				if(advancedsearching)
+				{
+					result = db.AdvancedSearch(searchText.getText());
+				}
+				else
+				{
+					result = db.search(searchText.getText());
+				}
+				elapsedTime = (new Date()).getTime() - startTime;
+				double seconds = elapsedTime / 1000.0;
+				resultLabel2.setText("Results:(Searched " + Database.textcount + " Texts in " + seconds + " Seconds)");
+				if (result.equals("QUERY TERM NOT FOUND")) {
+					resultText2.setText("");
+					JOptionPane.showMessageDialog(searchFrame, result, "Error", JOptionPane.ERROR_MESSAGE);
+				} else {
+					resultText2.setText(result);
+					int index = resultText2.getText().indexOf(searchText2.getText());
+					int len = searchText2.getText().length();
+					Highlighter highlighter = resultText2.getHighlighter();
+					HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
+					while (index >= 0) {
+						try {
+							highlighter.addHighlight(index, index + len, painter);
+						} catch (BadLocationException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						index = resultText2.getText().indexOf(searchText2.getText(), index + len);
+					}
+
+				}
+			}
+		});
+
+		// action listener for search button in tab 3
+		searchText3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				long startTime = System.currentTimeMillis();
+				long elapsedTime = 0L;
+				String result = "";
+				if(advancedsearching)
+				{
+					result = db.AdvancedSearch(searchText.getText());
+				}
+				else
+				{
+					result = db.search(searchText.getText());
+				}
+				elapsedTime = (new Date()).getTime() - startTime;
+				double seconds = elapsedTime / 1000.0;
+				resultLabel3.setText("Results:(Searched " + Database.textcount + " Texts in " + seconds + " Seconds)");
+
+				if (result.equals("QUERY TERM NOT FOUND")) {
+					resultText3.setText("");
+					JOptionPane.showMessageDialog(searchFrame, result, "Error", JOptionPane.ERROR_MESSAGE);
+				} else {
+					resultText3.setText(result);
+					int index = resultText3.getText().indexOf(searchText.getText());
+					int len = searchText3.getText().length();
+					Highlighter highlighter = resultText3.getHighlighter();
+					HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
+					while (index >= 0) {
+						try {
+							highlighter.addHighlight(index, index + len, painter);
+						} catch (BadLocationException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						index = resultText3.getText().indexOf(searchText3.getText(), index + len);
+					}
+
+				}
+			}
+		});
+
+		// action listener for search button in tab 4
+		searchText4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				long startTime = System.currentTimeMillis();
+				long elapsedTime = 0L;
+				String result = "";
+				if(advancedsearching)
+				{
+					result = db.AdvancedSearch(searchText.getText());
+				}
+				else
+				{
+					result = db.search(searchText.getText());
+				}
+				elapsedTime = (new Date()).getTime() - startTime;
+				double seconds = elapsedTime / 1000.0;
+				resultLabel4.setText("Results:(Searched " + Database.textcount + " Texts in " + seconds + " Seconds)");
+
+				if (result.equals("QUERY TERM NOT FOUND")) {
+					resultText4.setText("");
+					JOptionPane.showMessageDialog(searchFrame, result, "Error", JOptionPane.ERROR_MESSAGE);
+				} else {
+					resultText4.setText(result);
+					int index = resultText4.getText().indexOf(searchText4.getText());
+					int len = searchText4.getText().length();
+					Highlighter highlighter = resultText4.getHighlighter();
+					HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
+					while (index >= 0) {
+						try {
+							highlighter.addHighlight(index, index + len, painter);
+						} catch (BadLocationException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						index = resultText.getText().indexOf(searchText4.getText(), index + len);
+					}
+				}
+			}
+		});
+
+		// button for clearing the search in tab 1
+		JButton clearSearch = new JButton("Clear Search");
+		clearSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				searchText.setText("");
+				resultText.setText("");
+			}
+		});
+
+		// panel for the search button in tab 1
+		JPanel clearPanel = new JPanel(new FlowLayout());
+		clearPanel.add(clearSearch);
+		resultPanel.add(clearPanel, BorderLayout.SOUTH);
+
+		// button for clearing the search in tab 2
+		JButton clearSearch2 = new JButton("Clear Search");
+		clearSearch2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				searchText2.setText("");
+				resultText2.setText("");
+			}
+		});
+
+		// panel for the search button in tab 2
+		JPanel clearPanel2 = new JPanel(new FlowLayout());
+		clearPanel2.add(clearSearch2);
+		resultPanel2.add(clearPanel2, BorderLayout.SOUTH);
+
+		// button for clearing the search in tab 3
+		JButton clearSearch3 = new JButton("Clear Search");
+		clearSearch3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				searchText3.setText("");
+				resultText3.setText("");
+			}
+		});
+
+		// panel for the search button in tab 3
+		JPanel clearPanel3 = new JPanel(new FlowLayout());
+		clearPanel3.add(clearSearch3);
+		resultPanel3.add(clearPanel3, BorderLayout.SOUTH);
+
+		// button for clearing the search in tab 4
+		JButton clearSearch4 = new JButton("Clear Search");
+		clearSearch4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				searchText4.setText("");
+				resultText4.setText("");
+			}
+		});
+
+		// panel for the search button in tab 4
+		JPanel clearPanel4 = new JPanel(new FlowLayout());
+		clearPanel4.add(clearSearch4);
+		resultPanel4.add(clearPanel4, BorderLayout.SOUTH);
+
+		// add components to main panel
+		JPanel textBoxPanel = new JPanel(new BorderLayout());
+		textBoxPanel.add(topPanel, BorderLayout.NORTH);
+		textBoxPanel.add(tabPane, BorderLayout.CENTER);
+		searchFrame.add(textBoxPanel, BorderLayout.CENTER);
+		searchFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+	}
 
 }
